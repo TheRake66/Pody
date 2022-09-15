@@ -154,7 +154,7 @@ socket.runQuery(query, '%upon%')
 line = socket.fetchOne()
 
 # Conversion de la ligne en objet
-user = Converter(Utilisateur).convert(line)
+user = Converter(Utilisateur).convertWith(line)
 ```
 
 

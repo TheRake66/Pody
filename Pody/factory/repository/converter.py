@@ -15,7 +15,7 @@ class Converter:
         self.__model = class_
         
         
-    def convert(self, data : dict) -> object:
+    def convertWith(self, data : dict) -> object:
         """Convertit les données vers le modèle.
 
         Args:

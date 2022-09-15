@@ -149,7 +149,7 @@ class Connection:
         Returns:
             List[object]: Liste des résultats de la requête sous forme d'objet.
         """
-        return [ Converter(class_).convert(row) for row in self.fetchAll() ]
+        return [ Converter(class_).convertWith(row) for row in self.fetchAll() ]
         
         
     def fetchOneObject(self, class_ : type) -> Optional[object]:
@@ -162,7 +162,7 @@ class Connection:
             Optional[object]: Premier résultat de la requête sous forme d'objet.
         """
         row = self.fetchOne()
-        return Converter(class_).convert(row) if not row is None else None
+        return Converter(class_).convertWith(row) if not row is None else None
     
     
     def commitChange(self) -> None:
