@@ -9,10 +9,13 @@ class Query:
     """
     
     
-    def  __init__(self) -> None:
+    def  __init__(self, query : str = '') -> None:
         """Constructeur de la classe.
+        
+        Args:
+            query (str, optional): Requête. Par défaut ''.
         """
-        self.__query = ''
+        self.__query = query
     
     
     def __str__(self) -> str:

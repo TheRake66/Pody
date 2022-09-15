@@ -23,7 +23,11 @@ class Generator:
         Args:
             tables (Union[str, tuple]): Le nom de la table ou les tables. Si None, toutes les tables seront générées.
         """
-        database = self.__connection.getConfigurations().getDatabase().lower()
+        configuration = self.__connection.getConfigurations()
+        dictionary = configuration.isDictionary()
+        configuration.isDictionary(False)
+        database = configuration.getDatabase().lower()
+        logging.info(f'Génération du du modèle "{database}"...')
         if not os.path.exists(database):
             logging.info(f'Création du dépôt "{database}"...')
             os.makedirs(database)
@@ -34,16 +38,15 @@ class Generator:
             tables = (tables,)
             
         for table in tables:
-            if type(table) is dict:
-                table = list(table.values())
             name = table[0].lower()
                 
-            logging.info(f'Génération du modèle "{name}"...')
             model = f'{database}/{name}.py'
             if not os.path.exists(model):
+                logging.info(f'Génération du modèle "{name}"...')
                 with open(model, mode="w", encoding="utf-8") as file:
                         
                     file.write(f'''from Pody.factory.repository.model import Model
+                            
                             
                         
 class {name.capitalize()}(Model):
@@ -59,9 +62,7 @@ class {name.capitalize()}(Model):
                     columns = self.__connection.runQuery(f'SHOW COLUMNS FROM {name}').fetchAll()
                     parameters = []
                     attributes = []
-                    for column in columns:        
-                        if type(column) is dict:
-                            column = list(column.values())                
+                    for column in columns:          
                         name, type_, null, key, default, extra = column
                         
                         logging.info(f'Génération de l\'attribut "{name}"...')
@@ -98,3 +99,4 @@ class {name.capitalize()}(Model):
                     file.write(f'    def __init__(self{parameters}):{attributes}')
                     
         logging.info('Génération terminée.')
+        configuration.isDictionary(dictionary)

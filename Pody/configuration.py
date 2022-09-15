@@ -1,4 +1,8 @@
 
+from typing import Union
+
+
+
 class Configuration:
     """Objet de configuration de la connexion à la base de données.
     """
@@ -98,10 +102,16 @@ class Configuration:
         return self.__prepared
     
     
-    def isDictionary(self) -> bool:
-        """Retourne l'état du dictionnaire.
-
+    def isDictionary(self, value : bool = None) -> Union[bool, None]:
+        """Retourne ou modifie l'état du dictionnaire.
+            
+        Args:
+            value (bool, optional): Activation du dictionnaire. Par défaut None. Si None, retourne l'état actuel.
+        
         Returns:
-            bool: Activation du dictionnaire.
+            bool: Activation du dictionnaire si value est None.
         """
-        return self.__dictionary
+        if value is None:
+            return self.__dictionary
+        else:
+            self.__dictionary = value

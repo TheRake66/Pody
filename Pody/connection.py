@@ -165,28 +165,10 @@ class Connection:
             Optional[Union[Tuple, Dict]]: Premier résultat de la requête.
         """
         row = self.__cursor.fetchone()
-        if row is None:
-            return None
-        elif self.__configuration.isDictionary():
+        if not row is None and self.__configuration.isDictionary():
             return dict(zip(self.__cursor.column_names, row))
         else:
             return row
-        
-        
-    def fetchOneObject(self, class_ : type) -> Optional[object]:
-        """Récupère le premier résultat d'une requête SQL sous forme d'objet.
-
-        Args:
-            class_ (type): Type de l'objet.
-
-        Returns:
-            Optional[object]: Premier résultat de la requête sous forme d'objet.
-        """
-        row = self.__cursor.fetchone()
-        if row is None:
-            return None
-        else:
-            return Converter(class_).convert(dict(zip(self.__cursor.column_names, row)))
         
     
     def fetchAllObjects(self, class_ : type) -> List[object]:
@@ -198,6 +180,25 @@ class Connection:
         Returns:
             List[object]: Liste des résultats de la requête sous forme d'objet.
         """
-        return [Converter(class_).convert(dict(zip(self.__cursor.column_names, r))) for r in self.__cursor.fetchall()]
-    
+        dictionary = self.__configuration.isDictionary()
+        self.__configuration.isDictionary(True)
+        rows = self.fetchAll()
+        self.__configuration.isDictionary(dictionary)
+        return [ Converter(class_).convert(row) for row in rows ] if not rows is None else []
+        
+        
+    def fetchOneObject(self, class_ : type) -> Optional[object]:
+        """Récupère le premier résultat d'une requête SQL sous forme d'objet.
+
+        Args:
+            class_ (type): Type de l'objet.
+
+        Returns:
+            Optional[object]: Premier résultat de la requête sous forme d'objet.
+        """
+        dictionary = self.__configuration.isDictionary()
+        self.__configuration.isDictionary(True)
+        row = self.fetchOne()
+        self.__configuration.isDictionary(dictionary)
+        return Converter(class_).convert(row) if not row is None else None
     

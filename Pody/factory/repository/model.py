@@ -31,26 +31,8 @@ class Model:
         reflection = Reflection(self)
         connection = Connection.getInstance(reflection.getDatabase())
         query = Query().update(reflection.getTable(), reflection.getColumns(), Reflection.generateMark(reflection.getValues()))
-    
-        if columns is None:
-            columns = reflection.getPrimaryKey()
-            values = reflection.getPrimaryKeyValue()
-        else:
-            if not type(columns) is tuple:
-                values = getattr(self, columns)
-            else:
-                values = tuple(getattr(self, column) for column in columns)
-            
-        if not type(columns) is tuple:
-            query.where(columns, '%s', clause)
-        else:
-            for i in range(len(columns)):
-                if i == 0:
-                    query.where(columns[i], values[i], clause)
-                else:
-                    query.and_(columns[i], values[i], clause)
-                
-        connection.runQuery(query, reflection.getValues() + values)
+        where, values = self.__findClause(columns, clause)
+        connection.runQuery(Query(f'{str(query)} {where}'), reflection.getValues() + values)
         logging.info('Mise à jour d\'un modèle dans la base de données.')
         
 
@@ -64,26 +46,8 @@ class Model:
         reflection = Reflection(self)
         connection = Connection.getInstance(reflection.getDatabase())
         query = Query().delete(reflection.getTable())
-    
-        if columns is None:
-            columns = reflection.getPrimaryKey()
-            values = reflection.getPrimaryKeyValue()
-        else:
-            if not type(columns) is tuple:
-                values = getattr(self, columns)
-            else:
-                values = tuple(getattr(self, column) for column in columns)
-            
-        if not type(columns) is tuple:
-            query.where(columns, '%s', clause)
-        else:
-            for i in range(len(columns)):
-                if i == 0:
-                    query.where(columns[i], values[i], clause)
-                else:
-                    query.and_(columns[i], values[i], clause)
-                    
-        connection.runQuery(query, values)
+        where, values = self.__findClause(columns, clause)
+        connection.runQuery(Query(f'{str(query)} {where}'), values)
         logging.info('Suppression d\'un modèle dans la base de données.')
         
         
@@ -102,26 +66,8 @@ class Model:
         query = Query() \
             .select(reflection.getColumns()) \
             .from_(reflection.getTable())
-    
-        if columns is None:
-            columns = reflection.getKeys()
-            values = reflection.getKeysValues()
-        else:
-            if not type(columns) is tuple:
-                values = getattr(self, columns)
-            else:
-                values = tuple(getattr(self, column) for column in columns)
-            
-        if not type(columns) is tuple:
-            query.where(columns, '%s', clause)
-        else:
-            for i in range(len(columns)):
-                if i == 0:
-                    query.where(columns[i], '%s', clause)
-                else:
-                    query.and_(columns[i], '%s', clause)
-        
-        connection.runQuery(query, values)
+        where, values = self.__findClause(columns, clause)
+        connection.runQuery(Query(f'{str(query)} {where}'), values)
         object = connection.fetchOneObject(self.__class__)
         logging.info('Lecture d\'un modèle dans la base de données.')
         return object
@@ -142,8 +88,26 @@ class Model:
         query = Query() \
             .select(reflection.getColumns()) \
             .from_(reflection.getTable())
+        where, values = self.__findClause(columns, clause)
+        connection.runQuery(Query(f'{str(query)} {where}'), values)
+        objects = connection.fetchAllObjects(self.__class__)
+        logging.info('Lecture de plusieurs modèles dans la base de données.')
+        return objects
     
+    
+    def __findClause(self, columns : tuple, clause : Clause) -> tuple:
+        """Construction de la clause WHERE.
+
+        Args:
+            columns (tuple): La liste des colonnes.
+            clause (Clause): Le type de clause.
+
+        Returns:
+            tuple: _description_
+        """
+        query = Query()
         if columns is None:
+            reflection = Reflection(self)
             columns = reflection.getKeys()
             values = reflection.getKeysValues()
         else:
@@ -160,8 +124,5 @@ class Model:
                     query.where(columns[i], '%s', clause)
                 else:
                     query.and_(columns[i], '%s', clause)
-        
-        connection.runQuery(query, values)
-        objects = connection.fetchManyObject(self.__class__)
-        logging.info('Lecture de plusieurs modèles dans la base de données.')
-        return objects
+                    
+        return (query, values)
