@@ -1,6 +1,6 @@
 <br>
 <p align="center">
-    <img src="https://github.com/TheRake66/Pody/blob/main/assetss/logo_full.png" alt="logo" width=400>
+    <img src="https://github.com/TheRake66/Pody/blob/main/assets/logo_full.png" alt="logo" width=400>
 <p align="center">
 Micro-framework de gestion de base de données en Python
 <br>
