@@ -1,6 +1,5 @@
-
-
 import logging
+
 from Pody.configuration import Configuration
 from Pody.connection import Connection
 from Pody.factory.repository.generator import Generator
