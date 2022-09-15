@@ -176,7 +176,7 @@ user = Utilisateur(1).read()
 user = Utilisateur(None, 'Dupont').read('nom')
 
 # Récupération du premier utilisateur avec l'id au dessus de « 1 »
-user = Utilisateur(1).read(1, Clause.GREATER)
+user = Utilisateur(1).read(None, Clause.GREATER)
 
 # Mise à jour du nom de l'utilisateur
 user.nom = 'Marcel'

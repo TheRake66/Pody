@@ -217,9 +217,13 @@ class Model:
             column = reflection.getKeys()
             values = reflection.getKeysValues()
         else:
-            values = getattr(self, column) \
-                if not type(column) is tuple \
-                else tuple(getattr(self, column) for column in column)
+            if not type(column) is tuple:
+                values = getattr(self, column)
+                column = Reflection.parseKey(column)
+            else:
+                values = tuple(getattr(self, c) for c in column)
+                column = tuple(Reflection.parseKey(c) for c in column)
+                
             
         if type(column) is tuple and type(clause) is tuple:
             for i in range(len(column)):
