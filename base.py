@@ -14,7 +14,7 @@ logging.getLogger().setLevel(logging.INFO)
 
 
 # Configuration de la base de données
-config = Configuration('test', 'root', '', 'localhost', '3306')
+config = Configuration('bdd', 'root', '', 'localhost', '3306')
 
 # Connexion à la base de données
 socket = Connection(config)

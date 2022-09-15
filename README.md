@@ -73,7 +73,7 @@ Description des modules :
 
 ## Utilisation
 
-*Pour les démonstrations, nous utiliserons une base nommée « test », qui contient une table nommée « utilisateur », qui contient les champs « id (clé primaire) », « nom », « prenom », « mail ».*
+*Pour les démonstrations, nous utiliserons une base nommée « bdd », qui contient une table nommée « utilisateur », qui contient les champs « id (clé primaire) », « nom », « prenom », « mail ».*
 
 
 ### Connexion à une base de données
@@ -82,7 +82,7 @@ Pour se connecter à une base de données il faut dans un premier temps créer l
 
 ```py
 # Nom de la base, nom d'utilisateur, mot de passe, hôte, port, auto-commit
-config = Configuration('test', 'root', '', 'localhost', '3306', True)
+config = Configuration('bdd', 'root', '', 'localhost', '3306', True)
 ```
 
 Il faut ensuite ouvrir la connexion :
@@ -98,8 +98,8 @@ Quelques exemple de manipulation des connexion :
 # Récupération de toutes les connexions
 Connection.getAllInstances()
 
-# Récupération de la connexion ayant pour nom de base de données « test »
-Connection.getInstance('test')
+# Récupération de la connexion ayant pour nom de base de données « bdd »
+Connection.getInstance('bdd')
 ```
 
 
@@ -118,7 +118,7 @@ build.generateModels('utilisateur')
 build.generateModels()
 
 # Importation des modèles
-from test.utilisateur import Utilisateur
+from bdd.utilisateur import Utilisateur
 ```
 
 
@@ -142,9 +142,9 @@ query = Query('''
 
 # Via les méthodes de construction
 query = Query() \
-        .select('nom')
-        .from_('utilisateur)
-        .where('id', 3)
+        .select('nom') \
+        .from_('utilisateur') \
+        .where('id', 3) \
         .and_('prenom', '%s', Clause.LIKE)
 
 # Lancement de la requête sur la connexion a la base de données
@@ -170,7 +170,7 @@ Utilisateur(None, 'Dupont', 'Michel', 'm.dupont@gmail.com').create()
 user = Utilisateur(1).read()
 
 # Récupération de l'utilisateur avec le nom « Dupont »
-user = Utilisateur(None 'Dupont').read('nom')
+user = Utilisateur(None, 'Dupont').read('nom')
 
 # Récupération du premier utilisateur avec l'id au dessus de « 1 »
 user = Utilisateur(1).read(1, Clause.GREATER)
@@ -183,7 +183,7 @@ user.update()
 user.delete()
 
 # Récupération de tous les utilisateurs ayant une adresse gmail
-users = Utilisateur(None, None, None '%@gmail.com').many('mail', Clause.LIKE)
+users = Utilisateur(None, None, None, '%@gmail.com').many('mail', Clause.LIKE)
 
 # Vérifie si l'utilisateur ayant l'id « 2 » existe
 Utilisateur(2).exists()
