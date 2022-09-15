@@ -8,7 +8,7 @@ from Pody.connection import Connection
 from Pody.factory.repository.generator import Generator
 
 
-os.system('cls' if os.name=='nt' else 'clear')
+os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def ask(text : str, default : any = None, isInt : bool = False) -> str:
