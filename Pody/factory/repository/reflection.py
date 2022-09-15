@@ -1,5 +1,6 @@
 import logging
 import os
+from typing import Union
 
 
 class Reflection:
@@ -7,12 +8,14 @@ class Reflection:
     """
     
     
-    def __init__(self, model : object) -> None:
+    def __init__(self, model : Union[object, type]) -> None:
         """Constructeur de la classe.
 
         Args:
-            model (object): Modèle à utiliser.
+            model (Union[object, type]): Modèle à réfléchir.
         """
+        if type(model) is type:
+            model = model()
         self.__model = model
     
 
@@ -104,8 +107,8 @@ class Reflection:
         return tuple(values)
         
     
-    @staticmethod
-    def parseKey(key : str) -> str:
+    @classmethod
+    def parseKey(cls, key : str) -> str:
         """Parse une clé primaire.
         
         Args:
@@ -117,8 +120,8 @@ class Reflection:
         return key[1:] if key[0] == '_' else key
     
     
-    @staticmethod
-    def generateMark(columns : list) -> tuple:
+    @classmethod
+    def generateMark(cls, columns : list) -> tuple:
         """Génère une chaine de caractères de marqueurs.
         
         Args:

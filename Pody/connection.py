@@ -21,18 +21,18 @@ class Connection:
                      # Instance courante de connexion à la base de données.
     
     
-    @staticmethod
-    def getInstances() -> 'dict[str, Connection]':
+    @classmethod
+    def getInstances(cls) -> 'dict[str, Connection]':
         """Retourne la liste des instances de connexion à la base de données.
 
         Returns:
             dict[str, Connection]: Liste des instances de connexion à la base de données.
         """
-        return Connection.__instances
+        return cls.__instances
     
     
-    @staticmethod
-    def getInstance(database : str) -> 'Connection':
+    @classmethod
+    def getInstance(cls, database : str) -> 'Connection':
         """Retourne l'instance de connexion à la base de données correspondant au nom de la base de données.
 
         Args:
@@ -44,30 +44,30 @@ class Connection:
         Returns:
             Connection: Instance de connexion à la base de données.
         """
-        if database in Connection.__instances:
-            return Connection.__instances[database]
+        if database in cls.__instances:
+            return cls.__instances[database]
         else:
             raise Exception(f'Aucune connexion à la base de données "{database}" n\'a été établie !')
         
         
-    @staticmethod
-    def getCurrent() -> 'Connection':
+    @classmethod
+    def getCurrent(cls) -> 'Connection':
         """Retourne l'instance courante de connexion à la base de données.
 
         Returns:
             Connection: Instance courante de connexion à la base de données.
         """
-        return Connection.__current
+        return cls.__current
     
     
-    @staticmethod
-    def setCurrent(database : str) -> None:
+    @classmethod
+    def setCurrent(cls, database : str) -> None:
         """Définit l'instance courante de connexion à la base de données.
 
         Args:
             database (str): Nom de la base de données.
         """
-        Connection.__current = Connection.getInstance(database)
+        cls.__current = cls.getInstance(database)
         logging.info(f'Changement de base de données vers "{database}".')
     
     
@@ -140,8 +140,9 @@ class Connection:
         logging.info(f'Exécution de la requête "{query}"...')
         if not type(parameters) is tuple:
             parameters = (parameters,)
+        logging.info(f'Paramètres de la requête {parameters}')
         self.__cursor.execute(str(query), parameters)
-        logging.info(f'Exécution de la requête "{query}" terminée.')
+        logging.info(f'Exécution de la requête terminée.')
         return self
     
 
@@ -151,11 +152,7 @@ class Connection:
         Returns:
             List[Union[Tuple, Dict]]: Liste des résultats de la requête.
         """
-        row = self.__cursor.fetchall()
-        if self.__configuration.isDictionary():
-            return [dict(zip(self.__cursor.column_names, r)) for r in row]
-        else:
-            return row
+        return [dict(zip(self.__cursor.column_names, r)) for r in self.__cursor.fetchall()]
         
         
     def fetchOne(self) -> Optional[Union[Tuple, Dict]]:
@@ -165,10 +162,7 @@ class Connection:
             Optional[Union[Tuple, Dict]]: Premier résultat de la requête.
         """
         row = self.__cursor.fetchone()
-        if not row is None and self.__configuration.isDictionary():
-            return dict(zip(self.__cursor.column_names, row))
-        else:
-            return row
+        return dict(zip(self.__cursor.column_names, row)) if not row is None else None
         
     
     def fetchAllObjects(self, class_ : type) -> List[object]:
@@ -180,11 +174,7 @@ class Connection:
         Returns:
             List[object]: Liste des résultats de la requête sous forme d'objet.
         """
-        dictionary = self.__configuration.isDictionary()
-        self.__configuration.isDictionary(True)
-        rows = self.fetchAll()
-        self.__configuration.isDictionary(dictionary)
-        return [ Converter(class_).convert(row) for row in rows ] if not rows is None else []
+        return [ Converter(class_).convert(row) for row in self.fetchAll() ]
         
         
     def fetchOneObject(self, class_ : type) -> Optional[object]:
@@ -196,9 +186,6 @@ class Connection:
         Returns:
             Optional[object]: Premier résultat de la requête sous forme d'objet.
         """
-        dictionary = self.__configuration.isDictionary()
-        self.__configuration.isDictionary(True)
         row = self.fetchOne()
-        self.__configuration.isDictionary(dictionary)
         return Converter(class_).convert(row) if not row is None else None
     

@@ -39,6 +39,8 @@ class Query:
         self.__query += 'SELECT '
         if columns is None:
             self.__query += '*'
+        elif not type(columns) is tuple:
+            self.__query += str(columns)
         else:
             for column in columns:
                 self.__query += f'{column}, '
@@ -56,12 +58,12 @@ class Query:
             Query: Instance de la classe.
         """
         self.__query += ' FROM '
-        if type(tables) is tuple():
+        if not type(tables) is tuple:
+            self.__query += str(tables)
+        else:
             for table in tables:
                 self.__query += f'{table}, '
             self.__query = self.__query[:-2]
-        else:
-            self.__query += tables
         return self
     
     
@@ -163,12 +165,12 @@ class Query:
             Query: Instance de la classe.
         """
         self.__query += ' GROUP BY '
-        if type(columns) is tuple():
+        if not type(columns) is tuple:
+            self.__query += str(columns)
+        else:
             for column in columns:
                 self.__query += f'{column}, '
             self.__query = self.__query[:-2]
-        else:
-            self.__query += columns
         return self
     
     
@@ -183,12 +185,12 @@ class Query:
             Query: Instance de la classe.
         """
         self.__query += ' ORDER BY '
-        if type(columns) is tuple():
+        if not type(columns) is tuple:
+            self.__query += str(columns)
+        else:
             for column in columns:
                 self.__query += f'{column}, '
             self.__query = self.__query[:-2]
-        else:
-            self.__query += columns
         self.__query += f' {direction}'
         return self
             
@@ -256,4 +258,17 @@ class Query:
             Query: Instance de la classe.
         """
         self.__query += f'DELETE FROM {table}'
+        return self
+    
+    
+    def truncate(self, table : str) -> 'Query':
+        """Ajoute la clause TRUNCATE TABLE à la requête.
+        
+        Args:
+            table (str): Nom de la table.
+        
+        Returns:
+            Query: Instance de la classe.
+        """
+        self.__query += f'TRUNCATE TABLE {table}'
         return self

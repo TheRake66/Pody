@@ -14,9 +14,8 @@ class Configuration:
                 password : str = '',
                 host : str = 'localhost',
                 port : int = 3306,
-                autocommit : bool = False,
-                prepared : bool = True,
-                dictionary : bool = True) -> None:
+                autocommit : bool = True,
+                prepared : bool = True) -> None:
         """Constructeur de la classe.
 
         Args:
@@ -27,7 +26,6 @@ class Configuration:
             port (int, optional): Port du serveur. Par défaut ***REMOVED***.
             autocommit (bool, optional): Activation de l'autocommit. Par défaut False.
             prepared (bool, optional): Activation des requêtes préparées. Par défaut True.
-            dictionary (bool, optional): Activation du dictionnaire. Par défaut True.
         """
         self.__database = database
         self.__user = user
@@ -36,7 +34,6 @@ class Configuration:
         self.__port = port
         self.__autocommit = autocommit
         self.__prepared = prepared
-        self.__dictionary = dictionary
         
     
     def getDatabase(self) -> str:
@@ -100,18 +97,3 @@ class Configuration:
             bool: Activation des requêtes préparées.
         """
         return self.__prepared
-    
-    
-    def isDictionary(self, value : bool = None) -> Union[bool, None]:
-        """Retourne ou modifie l'état du dictionnaire.
-            
-        Args:
-            value (bool, optional): Activation du dictionnaire. Par défaut None. Si None, retourne l'état actuel.
-        
-        Returns:
-            bool: Activation du dictionnaire si value est None.
-        """
-        if value is None:
-            return self.__dictionary
-        else:
-            self.__dictionary = value

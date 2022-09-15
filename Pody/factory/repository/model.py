@@ -11,6 +11,67 @@ class Model:
     """
     
     
+    @classmethod
+    def all(cls) -> list:
+        """Récupération de tous les modèles de la base de données.
+
+        Returns:
+            list: La liste des objets modèles.
+        """
+        reflection = Reflection(cls)
+        connection = Connection.getInstance(reflection.getDatabase())
+        query = Query() \
+            .select(reflection.getColumns()) \
+            .from_(reflection.getTable())
+        connection.runQuery(query)
+        objects = connection.fetchAllObjects(cls)
+        logging.info('Récupération de tous les modèles de la base de données.')
+        return objects
+    
+    
+    @classmethod
+    def size(cls) -> int:
+        """Récupération du nombre de modèles dans la base de données.
+
+        Returns:
+            int: Le nombre de modèles.
+        """
+        reflection = Reflection(cls)
+        connection = Connection.getInstance(reflection.getDatabase())
+        query = Query() \
+            .select('COUNT(1)') \
+            .from_(reflection.getTable())
+        connection.runQuery(query)
+        size = list(connection.fetchOne().values())[0]
+        logging.info('Récupération du nombre de modèles dans la base de données.')
+        return size    
+    
+    
+    @classmethod
+    def truncate(cls) -> None:
+        """Vidage de la table des modèles.
+        """
+        reflection = Reflection(cls)
+        connection = Connection.getInstance(reflection.getDatabase())
+        query = Query().truncate(reflection.getTable())
+        connection.runQuery(query)
+        logging.info('Vidage de la table des modèles dans la base de données.')
+    
+    
+    @classmethod
+    def execute(cls, query : Query, parameters : tuple = None) -> None:
+        """Exécution d'une requête.
+
+        Args:
+            query (Query): La requête.
+            parameters (tuple, optional): Les paramètres. Par défaut None.
+        """
+        reflection = Reflection(cls)
+        connection = Connection.getInstance(reflection.getDatabase())
+        connection.runQuery(query, parameters)
+        logging.info('Exécution d\'une requête sur la table des modèles dans la base de données.')
+
+    
     def create(self) -> None:
         """Création d'un modèle dans la base de données.
         """
@@ -93,6 +154,50 @@ class Model:
         objects = connection.fetchAllObjects(self.__class__)
         logging.info('Lecture de plusieurs modèles dans la base de données.')
         return objects
+    
+
+    def exists(self, columns : tuple = None, clause : Clause =  Clause.EQUAL) -> bool:
+        """Vérification de l'existence d'un modèle dans la base de données.
+
+        Args:
+            columns (tuple, optional): Clause de vérification. Par défaut None.
+            clause (Clause, optional): Type de clause. Par défaut Clause.EQUAL.
+
+        Returns:
+            bool: True si le modèle existe, False sinon.
+        """
+        reflection = Reflection(self)
+        connection = Connection.getInstance(reflection.getDatabase())
+        query = Query() \
+            .select('1') \
+            .from_(reflection.getTable())
+        where, values = self.__findClause(columns, clause)
+        connection.runQuery(Query(f'{str(query)} {where}'), values)
+        object = connection.fetchOneObject(self.__class__)
+        logging.info('Vérification de l\'existence d\'un modèle dans la base de données.')
+        return object is not None
+    
+    
+    def count(self, columns : tuple = None, clause : Clause =  Clause.EQUAL) -> int:
+        """Compte le nombre de modèles dans la base de données.
+
+        Args:
+            columns (tuple, optional): Clause de comptage. Par défaut None.
+            clause (Clause, optional): Type de clause. Par défaut Clause.EQUAL.
+
+        Returns:
+            int: Le nombre de modèles.
+        """
+        reflection = Reflection(self)
+        connection = Connection.getInstance(reflection.getDatabase())
+        query = Query() \
+            .select('COUNT(1)') \
+            .from_(reflection.getTable())
+        where, values = self.__findClause(columns, clause)
+        connection.runQuery(Query(f'{str(query)} {where}'), values)
+        count = list(connection.fetchOne().values())[0]
+        logging.info('Compte le nombre de modèles dans la base de données.')
+        return count
     
     
     def __findClause(self, columns : tuple, clause : Clause) -> tuple:

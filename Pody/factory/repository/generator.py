@@ -24,8 +24,6 @@ class Generator:
             tables (Union[str, tuple]): Le nom de la table ou les tables. Si None, toutes les tables seront générées.
         """
         configuration = self.__connection.getConfigurations()
-        dictionary = configuration.isDictionary()
-        configuration.isDictionary(False)
         database = configuration.getDatabase().lower()
         logging.info(f'Génération du du modèle "{database}"...')
         if not os.path.exists(database):
@@ -38,14 +36,15 @@ class Generator:
             tables = (tables,)
             
         for table in tables:
-            name = table[0].lower()
+            name = list(table.values())[0].lower()
                 
             model = f'{database}/{name}.py'
             if not os.path.exists(model):
                 logging.info(f'Génération du modèle "{name}"...')
                 with open(model, mode="w", encoding="utf-8") as file:
                         
-                    file.write(f'''from Pody.factory.repository.model import Model
+                    file.write(f'''from datetime import datetime
+from Pody.factory.repository.model import Model
                             
                             
                         
@@ -63,35 +62,45 @@ class {name.capitalize()}(Model):
                     parameters = []
                     attributes = []
                     for column in columns:          
-                        name, type_, null, key, default, extra = column
+                        name = column['Field'].lower()
+                        type = column['Type'].split('(')[0].lower()
+                        default = column['Default']
+                        key = column['Key']
+                        extra = column['Extra']
+                        null = column['Null']
                         
                         logging.info(f'Génération de l\'attribut "{name}"...')
                         
                         if key == 'PRI':
                             name = f'_{name}'
                         
-                        type_ = type_.split('(')[0].lower()
-                        if type_ in [ 'varchar', 'char', 'text' ]:
-                            type_ = 'str'
-                        elif type_ in [ 'double', 'decimal' ]:
-                            type_ = 'float'
-                        elif type_ in [ 'tinyint', 'smallint' ]:
-                            type_ = 'bool'
+                        if type in [ 'varchar', 'char', 'text' ]:
+                            type = 'str'
+                        elif type in [ 'double', 'decimal' ]:
+                            type = 'float'
+                        elif type in [ 'tinyint' ]:
+                            type = 'bool'
+                        elif type in [ 'smallint', 'int', 'mediumint', 'bigint' ]:
+                            type = 'int'
+                        elif type in [ 'date', 'datetime', 'timestamp' ]:
+                            type = 'datetime'
+                        else:
+                            type = 'str'
                             
                         if default is None:
                             default = 'None'
-                        elif type_ == 'str':
+                        elif type == 'str':
                             default = f"'{default}'"
-                        elif type_ == 'bool':
+                        elif type == 'bool':
                             default = 'True' if default else 'False'
-                        elif type_ == 'datetime':
+                        elif type == 'datetime':
                             default = f'datetime.datetime({default.year}, {default.month}, {default.day}, {default.hour}, {default.minute}, {default.second})'
-                        elif type_ == 'date':
+                        elif type == 'date':
                             default = f'datetime.date({default.year}, {default.month}, {default.day})'
-                        elif type_ == 'time':
+                        elif type == 'time':
                             default = f'datetime.time({default.hour}, {default.minute}, {default.second})'
                         
-                        parameters.append(f',\n        {name} : {type_} = {default}')
+                        parameters.append(f',\n        {name} : {type} = {default}')
                         attributes.append(f'\n        self.{name} = {name}')
              
                     parameters = ''.join(parameters)
@@ -99,4 +108,3 @@ class {name.capitalize()}(Model):
                     file.write(f'    def __init__(self{parameters}):{attributes}')
                     
         logging.info('Génération terminée.')
-        configuration.isDictionary(dictionary)

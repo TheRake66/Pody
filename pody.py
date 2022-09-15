@@ -34,13 +34,13 @@ def ask(text : str, default : any = None, isInt : bool = False) -> str:
             print("Valeur incorrecte !")
 
 
-W  = '\033[0m'  # white (normal)
+W  = '\033[0m'  # white (default)
 R  = '\033[31m' # red
 G  = '\033[32m' # green
 O  = '\033[33m' # orange
 B  = '\033[34m' # blue
 P  = '\033[35m' # purple
-Y = '\033[93m' # yellow
+Y  = '\033[93m' # yellow
 
 
 logging.basicConfig()
@@ -99,7 +99,4 @@ try:
     subprocess.Popen(f'explorer /select,"{database}"')
 except Exception as e:
     logging.error(f'Erreur lors de la génération du modèle : {e}')
-    exit(1)
-
-    
-    
+    exit(2)
