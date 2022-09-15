@@ -1,3 +1,18 @@
+<br>
+<p align="center">
+    <img src="https://github.com/TheRake66/Pody/blob/main/assetss/logo_full.png" alt="logo" width=400>
+<p align="center">
+Micro-framework de gestion de base de données en Python
+<br>
+<br>
+<a href="https://github.com/TheRake66/Pody/blob/main/LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/TheRake66/Pody"></a>
+<img alt="Taille du code" src="https://img.shields.io/github/languages/code-size/TheRake66/Pody">
+<a href="https://github.com/TheRake66/Pody/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/TheRake66/Pody"></a>
+</p>
+</p>
+<br>
+
+
 
 # Pody
 
