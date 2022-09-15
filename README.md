@@ -5,6 +5,9 @@
 Micro-framework de gestion de base de données en Python
 <br>
 <br>
+<a href="https://github.com/TheRake66/Pody/archive/refs/heads/main.zip"><b>• Télécharger •</b></a>
+<br>
+<br>
 <a href="https://github.com/TheRake66/Pody/blob/main/LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/TheRake66/Pody"></a>
 <img alt="Taille du code" src="https://img.shields.io/github/languages/code-size/TheRake66/Pody">
 <a href="https://github.com/TheRake66/Pody/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/TheRake66/Pody"></a>
