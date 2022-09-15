@@ -1,7 +1,7 @@
 import logging
 import mysql
 import mysql.connector
-from typing import List, Dict, Tuple, Union, Optional, Any
+from typing import List, Dict, Tuple, Union, Optional
 from Pody.configuration import Configuration
 from Pody.factory.query import Query
 from Pody.factory.repository.converter import Converter
@@ -16,13 +16,10 @@ class Connection:
     
     __instances = {} # type: dict[str, Connection]
                      # Liste des instances de connexion à la base de données.
-    __current = None # type: Connection
-                     
-                     # Instance courante de connexion à la base de données.
     
     
     @classmethod
-    def getInstances(cls) -> 'dict[str, Connection]':
+    def getAllInstances(cls) -> 'dict[str, Connection]':
         """Retourne la liste des instances de connexion à la base de données.
 
         Returns:
@@ -48,28 +45,7 @@ class Connection:
             return cls.__instances[database]
         else:
             raise Exception(f'Aucune connexion à la base de données "{database}" n\'a été établie !')
-        
-        
-    @classmethod
-    def getCurrent(cls) -> 'Connection':
-        """Retourne l'instance courante de connexion à la base de données.
 
-        Returns:
-            Connection: Instance courante de connexion à la base de données.
-        """
-        return cls.__current
-    
-    
-    @classmethod
-    def setCurrent(cls, database : str) -> None:
-        """Définit l'instance courante de connexion à la base de données.
-
-        Args:
-            database (str): Nom de la base de données.
-        """
-        cls.__current = cls.getInstance(database)
-        logging.info(f'Changement de base de données vers "{database}".')
-    
     
     def __init__(self, configuration : Configuration) -> None:
         """Constructeur de la classe.
@@ -93,7 +69,6 @@ class Connection:
             self.__cursor = self.__connection.cursor(
                 prepared = configuration.isPrepared())
             Connection.__instances[configuration.getDatabase()] = self
-            Connection.__current = self
         except mysql.connector.Error as error:
             logging.error(f'Impossible de se connecter à la base de données "{configuration.getDatabase()}" !')
             logging.error(error)
@@ -189,3 +164,16 @@ class Connection:
         row = self.fetchOne()
         return Converter(class_).convert(row) if not row is None else None
     
+    
+    def commitChange(self) -> None:
+        """Valide manuellement les modifications de la base de données.
+        """
+        logging.info('Validation manuelle des modifications...')
+        self.__connection.commit()
+        
+        
+    def rollbackChange(self) -> None:
+        """Annule manuellement les modifications de la base de données.
+        """
+        logging.info('Annulation manuelle des modifications...')
+        self.__connection.rollback()

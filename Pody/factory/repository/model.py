@@ -1,4 +1,5 @@
 import logging
+from typing import Union
 
 from Pody.connection import Connection
 from Pody.factory.clause import Clause
@@ -48,7 +49,7 @@ class Model:
     
     
     @classmethod
-    def truncate(cls) -> None:
+    def clear(cls) -> None:
         """Vidage de la table des modèles.
         """
         reflection = Reflection(cls)
@@ -82,42 +83,42 @@ class Model:
         logging.info('Création d\'un modèle dans la base de données.')
         
         
-    def update(self, columns : tuple = None, clause : Clause =  Clause.EQUAL) -> None:
+    def update(self, column : Union[str, tuple] = None, clause: Union[Clause, tuple] = Clause.EQUAL) -> None:
         """Mise à jour d'un modèle dans la base de données.
 
         Args:
-            columns (tuple, optional): Clause de mise à jour. Par défaut None.
-            clause (Clause, optional): Type de clause. Par défaut Clause.EQUAL.
+            column (Union[str, tuple], optional): La ou les colonnes à prendre en compte. Par défaut None.
+            clause (Union[Clause, tuple], optional): Le ou les types de clause. Par défaut Clause.EQUAL.
         """
         reflection = Reflection(self)
         connection = Connection.getInstance(reflection.getDatabase())
         query = Query().update(reflection.getTable(), reflection.getColumns(), Reflection.generateMark(reflection.getValues()))
-        where, values = self.__findClause(columns, clause)
+        where, values = self.__findClause(column, clause)
         connection.runQuery(Query(f'{str(query)} {where}'), reflection.getValues() + values)
         logging.info('Mise à jour d\'un modèle dans la base de données.')
         
 
-    def delete(self, columns : tuple = None, clause : Clause =  Clause.EQUAL) -> None:
+    def delete(self, column : Union[str, tuple] = None, clause: Union[Clause, tuple] = Clause.EQUAL) -> None:
         """Suppression d'un modèle dans la base de données.
 
         Args:
-            columns (tuple, optional): Clause de suppression. Par défaut None.
-            clause (Clause, optional): Type de clause. Par défaut Clause.EQUAL.
+            column (Union[str, tuple], optional): La ou les colonnes à prendre en compte. Par défaut None.
+            clause (Union[Clause, tuple], optional): Le ou les types de clause. Par défaut Clause.EQUAL.
         """
         reflection = Reflection(self)
         connection = Connection.getInstance(reflection.getDatabase())
         query = Query().delete(reflection.getTable())
-        where, values = self.__findClause(columns, clause)
+        where, values = self.__findClause(column, clause)
         connection.runQuery(Query(f'{str(query)} {where}'), values)
         logging.info('Suppression d\'un modèle dans la base de données.')
         
         
-    def read(self, columns : tuple = None, clause : Clause =  Clause.EQUAL) -> object:
+    def read(self, column : Union[str, tuple] = None, clause: Union[Clause, tuple] = Clause.EQUAL) -> object:
         """Lecture d'un modèle dans la base de données.
 
         Args:
-            columns (tuple, optional): Clause de lecture. Par défaut None.
-            clause (Clause, optional): Type de clause. Par défaut Clause.EQUAL.
+            column (Union[str, tuple], optional): La ou les colonnes à prendre en compte. Par défaut None.
+            clause (Union[Clause, tuple], optional): Le ou les types de clause. Par défaut Clause.EQUAL.
             
         Returns:
             object: L'objet modèle lu.
@@ -127,19 +128,19 @@ class Model:
         query = Query() \
             .select(reflection.getColumns()) \
             .from_(reflection.getTable())
-        where, values = self.__findClause(columns, clause)
+        where, values = self.__findClause(column, clause)
         connection.runQuery(Query(f'{str(query)} {where}'), values)
         object = connection.fetchOneObject(self.__class__)
         logging.info('Lecture d\'un modèle dans la base de données.')
         return object
     
     
-    def many(self, columns : tuple = None, clause : Clause =  Clause.EQUAL) -> list:
+    def many(self, column : Union[str, tuple] = None, clause: Union[Clause, tuple] = Clause.EQUAL) -> list:
         """Lecture de plusieurs modèles dans la base de données.
 
         Args:
-            columns (tuple, optional): Clause de lecture. Par défaut None.
-            clause (Clause, optional): Type de clause. Par défaut Clause.EQUAL.
+            column (Union[str, tuple], optional): La ou les colonnes à prendre en compte. Par défaut None.
+            clause (Union[Clause, tuple], optional): Le ou les types de clause. Par défaut Clause.EQUAL.
             
         Returns:
             list: La liste des objets modèles lus.
@@ -149,19 +150,19 @@ class Model:
         query = Query() \
             .select(reflection.getColumns()) \
             .from_(reflection.getTable())
-        where, values = self.__findClause(columns, clause)
+        where, values = self.__findClause(column, clause)
         connection.runQuery(Query(f'{str(query)} {where}'), values)
         objects = connection.fetchAllObjects(self.__class__)
         logging.info('Lecture de plusieurs modèles dans la base de données.')
         return objects
     
 
-    def exists(self, columns : tuple = None, clause : Clause =  Clause.EQUAL) -> bool:
+    def exists(self, column : Union[str, tuple] = None, clause: Union[Clause, tuple] = Clause.EQUAL) -> bool:
         """Vérification de l'existence d'un modèle dans la base de données.
 
         Args:
-            columns (tuple, optional): Clause de vérification. Par défaut None.
-            clause (Clause, optional): Type de clause. Par défaut Clause.EQUAL.
+            column (Union[str, tuple], optional): La ou les colonnes à prendre en compte. Par défaut None.
+            clause (Union[Clause, tuple], optional): Le ou les types de clause. Par défaut Clause.EQUAL.
 
         Returns:
             bool: True si le modèle existe, False sinon.
@@ -171,19 +172,19 @@ class Model:
         query = Query() \
             .select('1') \
             .from_(reflection.getTable())
-        where, values = self.__findClause(columns, clause)
+        where, values = self.__findClause(column, clause)
         connection.runQuery(Query(f'{str(query)} {where}'), values)
         object = connection.fetchOneObject(self.__class__)
         logging.info('Vérification de l\'existence d\'un modèle dans la base de données.')
         return object is not None
     
     
-    def count(self, columns : tuple = None, clause : Clause =  Clause.EQUAL) -> int:
+    def count(self, column : Union[str, tuple] = None, clause: Union[Clause, tuple] = Clause.EQUAL) -> int:
         """Compte le nombre de modèles dans la base de données.
 
         Args:
-            columns (tuple, optional): Clause de comptage. Par défaut None.
-            clause (Clause, optional): Type de clause. Par défaut Clause.EQUAL.
+            column (Union[str, tuple], optional): La ou les colonnes à prendre en compte. Par défaut None.
+            clause (Union[Clause, tuple], optional): Le ou les types de clause. Par défaut Clause.EQUAL.
 
         Returns:
             int: Le nombre de modèles.
@@ -193,41 +194,49 @@ class Model:
         query = Query() \
             .select('COUNT(1)') \
             .from_(reflection.getTable())
-        where, values = self.__findClause(columns, clause)
+        where, values = self.__findClause(column, clause)
         connection.runQuery(Query(f'{str(query)} {where}'), values)
         count = list(connection.fetchOne().values())[0]
         logging.info('Compte le nombre de modèles dans la base de données.')
         return count
     
     
-    def __findClause(self, columns : tuple, clause : Clause) -> tuple:
+    def __findClause(self, column : Union[str, tuple] = None, clause: Union[Clause, tuple] = Clause.EQUAL) -> tuple:
         """Construction de la clause WHERE.
 
         Args:
-            columns (tuple): La liste des colonnes.
-            clause (Clause): Le type de clause.
+            column (Union[str, tuple]): La ou les colonnes.
+            clause (Union[Clause, tuple], optional): Le ou les types de clause. Par défaut Clause.EQUAL.
 
         Returns:
-            tuple: _description_
+            tuple: La clause WHERE et les valeurs.
         """
         query = Query()
-        if columns is None:
+        if column is None:
             reflection = Reflection(self)
-            columns = reflection.getKeys()
+            column = reflection.getKeys()
             values = reflection.getKeysValues()
         else:
-            if not type(columns) is tuple:
-                values = getattr(self, columns)
-            else:
-                values = tuple(getattr(self, column) for column in columns)
+            values = getattr(self, column) \
+                if not type(column) is tuple \
+                else tuple(getattr(self, column) for column in column)
             
-        if not type(columns) is tuple:
-            query.where(columns, '%s', clause)
+        if type(column) is tuple and type(clause) is tuple:
+            for i in range(len(column)):
+                if i == 0: query.where(column[i], '%s', clause[i])
+                else: query.and_(column[i], '%s', clause[i])
+                
+        elif type(column) is tuple:
+            for i in range(len(column)):
+                if i == 0: query.where(column[i], '%s', clause)
+                else: query.and_(column[i], '%s', clause)
+                
+        elif type(clause) is tuple:
+            for i in range(len(clause)):
+                if i == 0: query.where(column, '%s', clause[i])
+                else: query.and_(column, '%s', clause[i])
+                
         else:
-            for i in range(len(columns)):
-                if i == 0:
-                    query.where(columns[i], '%s', clause)
-                else:
-                    query.and_(columns[i], '%s', clause)
+            query.where(column, '%s', clause)
                     
         return (query, values)

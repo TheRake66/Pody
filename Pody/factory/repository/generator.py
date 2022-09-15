@@ -11,13 +11,16 @@ class Generator:
     """
     
     
-    def __init__(self) -> None:
+    def __init__(self, connection : Connection) -> None:
         """Constructeur de la classe.
+        
+        Args:
+            connection (Connection): La connexion à la base de données.
         """
-        self.__connection = Connection.getCurrent()
+        self.__connection = connection
         
         
-    def generate(self, tables : Union[str, tuple] = None) -> None:
+    def generateModels(self, tables : Union[str, tuple] = None) -> None:
         """Génère un modèle à partir d'une table.
         
         Args:

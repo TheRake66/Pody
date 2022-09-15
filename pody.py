@@ -81,22 +81,26 @@ port = ask('Port (3306 par défaut) : ', 3306, True)
 try:
     logging.info('Connexion à la base de données...')
     config = Configuration(database, user, password, host, port)
-    Connection(config)
+    socket = Connection(config)
     logging.info('Connexion établie !')
+    
+    
+    all = ask('Générer le modèle de toutes les tables ? (O/N) (O par défaut) : ', 'O')
+    table = None if all == 'O' or all == 'o' else ask('Nom de la table à générer : ')
+        
+        
+    try:
+        logging.info('Génération du modèle...')
+        Generator(socket).generateModels(table)
+        logging.info('Modèle généré !') 
+        subprocess.Popen(f'explorer /select,"{database}"')
+    except Exception as e:
+        logging.error(f'Erreur lors de la génération du modèle : {e}')
+        exit(2)
+    
 except Exception as e:
     logging.error(f'Erreur lors de la connexion à la base de données : {e}')
     exit(1)
 
-
-all = ask('Générer le modèle de toutes les tables ? (O/N) (O par défaut) : ', 'O')
-table = None if all == 'O' or all == 'o' else ask('Nom de la table à générer : ')
     
     
-try:
-    logging.info('Génération du modèle...')
-    Generator().generate(table)
-    logging.info('Modèle généré !') 
-    subprocess.Popen(f'explorer /select,"{database}"')
-except Exception as e:
-    logging.error(f'Erreur lors de la génération du modèle : {e}')
-    exit(2)
