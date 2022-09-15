@@ -127,7 +127,7 @@ class Connection:
         Returns:
             List[Union[Tuple, Dict]]: Liste des résultats de la requête.
         """
-        return [dict(zip(self.__cursor.column_names, r)) for r in self.__cursor.fetchall()]
+        return [ dict(zip(self.__cursor.column_names, r)) for r in self.__cursor.fetchall() ]
         
         
     def fetchOne(self) -> Optional[Union[Tuple, Dict]]:
