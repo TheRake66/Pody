@@ -93,7 +93,10 @@ try:
         logging.info('Génération du modèle...')
         Generator(socket).generateModels(table)
         logging.info('Modèle généré !') 
-        subprocess.Popen(f'explorer /select,"{database}"')
+        if os.name == 'nt':
+            subprocess.Popen(f'explorer /select,"{database}"')
+        else:
+            subprocess.Popen(f'open {os.getcwd()}')
     except Exception as e:
         logging.error(f'Erreur lors de la génération du modèle : {e}')
         exit(2)
