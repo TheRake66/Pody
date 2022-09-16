@@ -28,10 +28,10 @@ class Generator:
         """
         configuration = self.__connection.getConfigurations()
         database = configuration.getDatabase().lower()
-        logging.info(f'Génération du du modèle "{database}"...')
         if not os.path.exists(database):
             logging.info(f'Création du dépôt "{database}"...')
             os.makedirs(database)
+            logging.info(f'Le dépôt a été créé.')
         
         if tables is None:
             tables = self.__connection.runQuery('SHOW TABLES').fetchAll()
@@ -106,7 +106,9 @@ class Generator:
                         parameters.append(f',\n        {name} : {type} = {default}')
                         attributes.append(f'\n        self.{name} = {name}')
                         docstring.append(f'\n            {name} ({type}, optional): Le champs "{name}". Par défaut {default}.')
-             
+
+                        logging.info(f'L\'attribut a été généré.')
+                
                     parameters = ''.join(parameters)
                     attributes = ''.join(attributes)
                     docstring = ''.join(docstring)
@@ -118,5 +120,4 @@ class Generator:
                     file.write(f'            {docstring}\n')
                     file.write(f'        """')
                     file.write(f'        {attributes}')
-                    
-        logging.info('Génération terminée.')
+                logging.info(f'Le modèle a été généré.')

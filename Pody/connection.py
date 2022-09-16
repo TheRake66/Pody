@@ -193,6 +193,7 @@ class Connection:
         """
         logging.info('Validation manuelle des modifications...')
         self.__connection.commit()
+        logging.info('Modifications validées.')
         
         
     def rollbackChange(self) -> None:
@@ -200,6 +201,7 @@ class Connection:
         """
         logging.info('Annulation manuelle des modifications...')
         self.__connection.rollback()
+        logging.info('Modifications annulées.')
         
         
     def closeSocket(self) -> None:
