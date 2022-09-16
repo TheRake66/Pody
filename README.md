@@ -85,7 +85,7 @@ Pour se connecter à une base de données il faut dans un premier temps créer l
 
 ```py
 # Nom de la base, nom d'utilisateur, mot de passe, hôte, port, auto-commit
-config = Configuration('bdd', 'root', '', 'localhost', '3306', True)
+config = Configuration('bdd', 'root', '', 'localhost', 3306, True)
 ```
 
 Il faut ensuite ouvrir la connexion :
