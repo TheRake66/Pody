@@ -54,7 +54,7 @@ class Connection:
         logging.info('Fermeture de toutes les instances de connexion à la base de données...')
         for instance in cls.__instances.values():
             instance.closeSocket()
-        logging.info('Fermeture des instances de connexion à la base de données terminée.')
+        logging.info('Toutes les instances ont été fermées.')
         
     
     @classmethod
