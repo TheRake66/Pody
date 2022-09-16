@@ -102,12 +102,12 @@ class Connection:
         return self.__cursor
     
     
-    def runQuery(self, query : Query, parameters : tuple = ()) -> 'Connection':
+    def runQuery(self, query : Query, parameters : any = ()) -> 'Connection':
         """Exécute une requête SQL.
 
         Args:
             query (Query): Objet de requête.
-            parameters (tuple, optional): Liste des paramètres de la requête. Par défaut, la liste est vide.
+            parameters (any, optional): Liste des paramètres de la requête. Par défaut, la liste est vide.
        
         Returns:
             Connection: Instance de connexion à la base de données.

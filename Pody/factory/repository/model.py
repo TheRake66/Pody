@@ -20,11 +20,10 @@ class Model:
             list: La liste des objets modèles.
         """
         reflection = Reflection(cls)
-        connection = Connection.getInstance(reflection.getDatabase())
         query = Query() \
             .select(reflection.getColumns()) \
             .from_(reflection.getTable())
-        connection.runQuery(query)
+        connection = cls().__runOn(query, (), reflection)
         objects = connection.fetchAllObjects(cls)
         logging.info('Récupération de tous les modèles de la base de données.')
         return objects
@@ -38,11 +37,10 @@ class Model:
             int: Le nombre de modèles.
         """
         reflection = Reflection(cls)
-        connection = Connection.getInstance(reflection.getDatabase())
         query = Query() \
             .select('COUNT(1)') \
             .from_(reflection.getTable())
-        connection.runQuery(query)
+        connection = cls().__runOn(query, (), reflection)
         size = list(connection.fetchOne().values())[0]
         logging.info('Récupération du nombre de modèles dans la base de données.')
         return size    
@@ -53,9 +51,8 @@ class Model:
         """Vidage de la table des modèles.
         """
         reflection = Reflection(cls)
-        connection = Connection.getInstance(reflection.getDatabase())
         query = Query().truncate(reflection.getTable())
-        connection.runQuery(query)
+        cls().__runOn(query, reflection)
         logging.info('Vidage de la table des modèles dans la base de données.')
     
     
@@ -67,9 +64,7 @@ class Model:
             query (Query): La requête.
             parameters (tuple, optional): Les paramètres. Par défaut None.
         """
-        reflection = Reflection(cls)
-        connection = Connection.getInstance(reflection.getDatabase())
-        connection.runQuery(query, parameters)
+        cls().__runOn(query, parameters)
         logging.info('Exécution d\'une requête sur la table des modèles dans la base de données.')
 
     
@@ -77,9 +72,8 @@ class Model:
         """Création d'un modèle dans la base de données.
         """
         reflection = Reflection(self)
-        connection = Connection.getInstance(reflection.getDatabase())
         query = Query().insert(reflection.getTable(), reflection.getColumns(), Reflection.generateMark(reflection.getValues()))
-        connection.runQuery(query, reflection.getValues())
+        self.__runOn(query, reflection.getValues(), reflection)
         logging.info('Création d\'un modèle dans la base de données.')
         
         
@@ -91,10 +85,9 @@ class Model:
             clause (Union[Clause, tuple], optional): Le ou les types de clause. Par défaut Clause.EQUAL.
         """
         reflection = Reflection(self)
-        connection = Connection.getInstance(reflection.getDatabase())
         query = Query().update(reflection.getTable(), reflection.getColumns(), Reflection.generateMark(reflection.getValues()))
         where, values = self.__findClause(column, clause)
-        connection.runQuery(Query(f'{str(query)} {where}'), reflection.getValues() + values)
+        self.__runOn(Query(f'{str(query)} {where}'), reflection.getValues() + values, reflection)
         logging.info('Mise à jour d\'un modèle dans la base de données.')
         
 
@@ -106,10 +99,9 @@ class Model:
             clause (Union[Clause, tuple], optional): Le ou les types de clause. Par défaut Clause.EQUAL.
         """
         reflection = Reflection(self)
-        connection = Connection.getInstance(reflection.getDatabase())
         query = Query().delete(reflection.getTable())
         where, values = self.__findClause(column, clause)
-        connection.runQuery(Query(f'{str(query)} {where}'), values)
+        self.__runOn(Query(f'{str(query)} {where}'), values, reflection)
         logging.info('Suppression d\'un modèle dans la base de données.')
         
         
@@ -124,12 +116,11 @@ class Model:
             object: L'objet modèle lu.
         """
         reflection = Reflection(self)
-        connection = Connection.getInstance(reflection.getDatabase())
         query = Query() \
             .select(reflection.getColumns()) \
             .from_(reflection.getTable())
         where, values = self.__findClause(column, clause)
-        connection.runQuery(Query(f'{str(query)} {where}'), values)
+        connection = self.__runOn(Query(f'{str(query)} {where}'), values, reflection)
         object = connection.fetchOneObject(self.__class__)
         logging.info('Lecture d\'un modèle dans la base de données.')
         return object
@@ -146,12 +137,11 @@ class Model:
             list: La liste des objets modèles lus.
         """
         reflection = Reflection(self)
-        connection = Connection.getInstance(reflection.getDatabase())
         query = Query() \
             .select(reflection.getColumns()) \
             .from_(reflection.getTable())
         where, values = self.__findClause(column, clause)
-        connection.runQuery(Query(f'{str(query)} {where}'), values)
+        connection = self.__runOn(Query(f'{str(query)} {where}'), values, reflection)
         objects = connection.fetchAllObjects(self.__class__)
         logging.info('Lecture de plusieurs modèles dans la base de données.')
         return objects
@@ -168,12 +158,11 @@ class Model:
             bool: True si le modèle existe, False sinon.
         """
         reflection = Reflection(self)
-        connection = Connection.getInstance(reflection.getDatabase())
         query = Query() \
             .select('1') \
             .from_(reflection.getTable())
         where, values = self.__findClause(column, clause)
-        connection.runQuery(Query(f'{str(query)} {where}'), values)
+        connection = self.__runOn(Query(f'{str(query)} {where}'), values, reflection)
         object = connection.fetchOneObject(self.__class__)
         logging.info('Vérification de l\'existence d\'un modèle dans la base de données.')
         return object is not None
@@ -190,15 +179,32 @@ class Model:
             int: Le nombre de modèles.
         """
         reflection = Reflection(self)
-        connection = Connection.getInstance(reflection.getDatabase())
         query = Query() \
             .select('COUNT(1)') \
             .from_(reflection.getTable())
         where, values = self.__findClause(column, clause)
-        connection.runQuery(Query(f'{str(query)} {where}'), values)
+        connection = self.__runOn(Query(f'{str(query)} {where}'), values, reflection)
         count = list(connection.fetchOne().values())[0]
         logging.info('Compte le nombre de modèles dans la base de données.')
         return count
+    
+    
+    def __runOn(self, query : Query, parameters : any = (), relection : Reflection = None) -> Connection:
+        """Exécute une requête sur la base de données liée au modèle.
+
+        Args:
+            query (Query): La requête à exécuter.
+            parameters (any, optional): Les paramètres de la requête. Par défaut ().
+            relection (Reflection, optional): La réflexion existante du modèle. Par défaut None.
+            
+        Returns:
+            Connection: La connexion à la base de données.
+        """
+        if relection is None:
+            reflection = Reflection(self)
+        connection = Connection.getInstance(reflection.getDatabase())
+        connection.runQuery(query, parameters)
+        return connection
     
     
     def __findClause(self, column : Union[str, tuple] = None, clause: Union[Clause, tuple] = Clause.EQUAL) -> tuple:
