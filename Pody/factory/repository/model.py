@@ -1,3 +1,4 @@
+import json
 import logging
 from typing import Union
 
@@ -250,3 +251,12 @@ class Model:
             query.where(column, '%s', clause)
                     
         return (query, values)
+    
+    
+    def __str__(self):
+        """Retourne le modèle au format JSON.
+
+        Returns:
+            str: Je JSON du modèle.
+        """
+        return json.dumps(self.__dict__)
