@@ -67,8 +67,8 @@ Description des modules :
 - direction : Enumeration des types de direction de tri.
 - join : Enumeration des types de jointure.
 - query : Constructeur de requête SQL.
-- configuration : Objet contenant la configuration de connexion de base de données
-- connection : Module gérant les connexions et les interactions avec la base de données
+- configuration : Objet contenant la configuration de connexion de base de données.
+- connection : Module gérant les connexions et les interactions avec la base de données.
 - base : Template de base d'un projet.
 - pody : Outil en ligne de commande pour générer les modèles.
 
