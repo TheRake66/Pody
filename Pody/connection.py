@@ -115,7 +115,7 @@ class Connection:
         logging.info(f'Exécution de la requête "{query}"...')
         if not type(parameters) is tuple:
             parameters = (parameters,)
-        logging.info(f'Paramètres de la requête {parameters}')
+        logging.info(f'Paramètres de la requête "{parameters}"...')
         self.__cursor.execute(str(query), parameters)
         logging.info(f'Exécution de la requête terminée.')
         return self

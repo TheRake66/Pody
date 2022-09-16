@@ -46,24 +46,24 @@ class Generator:
                 logging.info(f'Génération du modèle "{name}"...')
                 with open(model, mode="w", encoding="utf-8") as file:
                         
-                    file.write(f'''from datetime import datetime
-from Pody.factory.repository.model import Model
-                            
-                            
-                        
-class {name.capitalize()}(Model):
-    """Modèle de la table "{name}".
-
-    Args:
-        Model (Model): Modèle de base.
-    """
-
-    
-''')
+                    file.write(f'from datetime import datetime\n')
+                    file.write(f'from Pody.factory.repository.model import Model\n')
+                    file.write('\n')
+                    file.write('\n')
+                    file.write('\n')
+                    file.write(f'class {name.capitalize()}(Model):\n')
+                    file.write(f'    """Modèle de la table "{name}".\n')
+                    file.write('\n')
+                    file.write(f'    Args:\n')
+                    file.write(f'        Model (Model): Modèle de base.\n')
+                    file.write(f'    """\n')
+                    file.write('\n')
+                    file.write('\n')
                     
                     columns = self.__connection.runQuery(f'SHOW COLUMNS FROM {name}').fetchAll()
                     parameters = []
                     attributes = []
+                    docstring = []
                     for column in columns:          
                         name = column['Field'].lower()
                         type = column['Type'].split('(')[0].lower()
@@ -105,9 +105,18 @@ class {name.capitalize()}(Model):
                         
                         parameters.append(f',\n        {name} : {type} = {default}')
                         attributes.append(f'\n        self.{name} = {name}')
+                        docstring.append(f'\n            {name} ({type}, optional): Le champs "{name}". Par défaut {default}.')
              
                     parameters = ''.join(parameters)
                     attributes = ''.join(attributes)
-                    file.write(f'    def __init__(self{parameters}):{attributes}')
+                    docstring = ''.join(docstring)
+                    
+                    file.write(f'    def __init__(self{parameters}):\n')
+                    file.write(f'        """Constructeur de la classe.\n')
+                    file.write('\n')
+                    file.write(f'        Args:\n')
+                    file.write(f'            {docstring}\n')
+                    file.write(f'        """')
+                    file.write(f'        {attributes}')
                     
         logging.info('Génération terminée.')

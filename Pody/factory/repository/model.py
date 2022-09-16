@@ -189,18 +189,18 @@ class Model:
         return count
     
     
-    def __runOn(self, query : Query, parameters : any = (), relection : Reflection = None) -> Connection:
+    def __runOn(self, query : Query, parameters : any = (), reflection : Reflection = None) -> Connection:
         """Exécute une requête sur la base de données liée au modèle.
 
         Args:
             query (Query): La requête à exécuter.
             parameters (any, optional): Les paramètres de la requête. Par défaut ().
-            relection (Reflection, optional): La réflexion existante du modèle. Par défaut None.
+            reflection (Reflection, optional): La réflexion existante du modèle. Par défaut None.
             
         Returns:
             Connection: La connexion à la base de données.
         """
-        if relection is None:
+        if reflection is None:
             reflection = Reflection(self)
         connection = Connection.getInstance(reflection.getDatabase())
         connection.runQuery(query, parameters)
