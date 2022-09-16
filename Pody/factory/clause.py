@@ -5,6 +5,7 @@ class Clause:
     """Enumération des types de clause.
     """
     
+    NONE = ' '     # type: str # Clause vide
     LESS = '<'     # type: str # <
     GREATER = '>'  # type: str # >
     EQUAL = '='    # type: str # =
