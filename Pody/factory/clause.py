@@ -5,7 +5,11 @@ class Clause:
     """Enumération des types de clause.
     """
     
-    LESS = '<'     # type: int # <
-    GREATER = '>'  # type: int # >
-    EQUAL = '='    # type: int # =
-    LIKE = 'LIKE'     # type: int # LIKE
+    LESS = '<'     # type: str # <
+    GREATER = '>'  # type: str # >
+    EQUAL = '='    # type: str # =
+    LIKE = 'LIKE'  # type: str # LIKE
+    IS = 'IS'      # type: str # IS
+    IN = 'IN'      # type: str # IN
+    NOT = 'NOT'    # type: str # NOT
+    

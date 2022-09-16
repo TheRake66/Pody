@@ -272,3 +272,36 @@ class Query:
         """
         self.__query += f'TRUNCATE TABLE {table}'
         return self
+    
+    
+    def drop(self, table : str) -> 'Query':
+        """Ajoute la clause DROP TABLE à la requête.
+        
+        Args:
+            table (str): Nom de la table.
+        
+        Returns:
+            Query: Instance de la classe.
+        """
+        self.__query += f'DROP TABLE {table}'
+        return self
+    
+    
+    def bopen(self) -> 'Query':
+        """Ajoute une parenthèse ouvrante à la requête.
+        
+        Returns:
+            Query: Instance de la classe.
+        """
+        self.__query += '('
+        return self
+    
+    
+    def bclose(self) -> 'Query':
+        """Ajoute une parenthèse fermante à la requête.
+        
+        Returns:
+            Query: Instance de la classe.
+        """
+        self.__query += ')'
+        return self
