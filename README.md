@@ -84,8 +84,8 @@ Description des modules :
 Pour se connecter à une base de données il faut dans un premier temps créer la configuration que va avoir celle-ci :
 
 ```py
-# Nom de la base, nom d'utilisateur, mot de passe, hôte, port, auto-commit
-config = Configuration('bdd', 'root', '', 'localhost', 3306, True)
+# Nom de la base, nom d'utilisateur, mot de passe, hôte, port
+config = Configuration('bdd', 'root', '', 'localhost', 3306)
 ```
 
 Il faut ensuite ouvrir la connexion :

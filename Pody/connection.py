@@ -89,7 +89,9 @@ class Connection:
                 password = configuration.getPassword()
             )
             self.__connection.autocommit = configuration.isAutocommit()
-            self.__cursor = self.__connection.cursor(prepared = configuration.isPrepared())
+            self.__cursor = self.__connection.cursor(
+                prepared = configuration.isPrepared(),
+                buffered = configuration.isBuffered())
             self.__instances[configuration.getDatabase()] = self
             logging.info(f'Connexion à la base de données établie.')
         except mysql.connector.Error as error:

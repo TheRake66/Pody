@@ -15,7 +15,8 @@ class Configuration:
                 host : str = 'localhost',
                 port : int = 3306,
                 autocommit : bool = True,
-                prepared : bool = True) -> None:
+                prepared : bool = True,
+                buffered : bool = False) -> None:
         """Constructeur de la classe.
 
         Args:
@@ -26,6 +27,7 @@ class Configuration:
             port (int, optional): Port du serveur. Par défaut ***REMOVED***.
             autocommit (bool, optional): Activation de l'autocommit. Par défaut False.
             prepared (bool, optional): Activation des requêtes préparées. Par défaut True.
+            buffered (bool, optional): Activation de la mise en mémoire tampon. Par défaut False.
         """
         self.__database = database
         self.__user = user
@@ -34,6 +36,7 @@ class Configuration:
         self.__port = port
         self.__autocommit = autocommit
         self.__prepared = prepared
+        self.__buffered = buffered
         
     
     def getDatabase(self) -> str:
@@ -85,7 +88,7 @@ class Configuration:
         """Retourne l'état de l'autocommit.
 
         Returns:
-            bool: Activation de l'autocommit.
+            bool: État de l'autocommit.
         """
         return self.__autocommit
     
@@ -94,6 +97,15 @@ class Configuration:
         """Retourne l'état des requêtes préparées.
 
         Returns:
-            bool: Activation des requêtes préparées.
+            bool: État des requêtes préparées.
         """
         return self.__prepared
+    
+    
+    def isBuffered(self) -> bool:
+        """Retourne l'état de la mise en mémoire tampon.
+
+        Returns:
+            bool: État de la mise en mémoire tampon.
+        """
+        return self.__buffered
