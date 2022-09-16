@@ -38,13 +38,13 @@ class Query:
         """
         self.__query += 'SELECT '
         if columns is None:
-            self.__query += '*'
+            self.__query += '* '
         elif not type(columns) is tuple:
-            self.__query += str(columns)
+            self.__query += f'{columns} '
         else:
             for column in columns:
                 self.__query += f'{column}, '
-            self.__query = self.__query[:-2]
+            self.__query = f'{self.__query[:-2]} '
         return self
     
     
@@ -57,13 +57,13 @@ class Query:
         Returns:
             Query: Instance de la classe.
         """
-        self.__query += ' FROM '
+        self.__query += 'FROM '
         if not type(tables) is tuple:
-            self.__query += str(tables)
+            self.__query += f'{tables} '
         else:
             for table in tables:
                 self.__query += f'{table}, '
-            self.__query = self.__query[:-2]
+            self.__query = f'{self.__query[:-2]} '
         return self
     
     
@@ -78,7 +78,7 @@ class Query:
         Returns:
             Query: Instance de la classe.
         """
-        self.__query += f' WHERE {column} {type} {value}'
+        self.__query += f'WHERE {column} {type} {value} '
         return self
     
     
@@ -93,7 +93,7 @@ class Query:
         Returns:
             Query: Instance de la classe.
         """
-        self.__query += f' AND {column} {type} {value}'
+        self.__query += f'AND {column} {type} {value} '
         return self
     
     
@@ -108,7 +108,7 @@ class Query:
         Returns:
             Query: Instance de la classe.
         """
-        self.__query += f' OR {column} {type} {value}'
+        self.__query += f'OR {column} {type} {value} '
         return self
     
     
@@ -122,7 +122,7 @@ class Query:
         Returns:
             Query: Instance de la classe.
         """
-        self.__query += f' ON {column1} = {column2}'
+        self.__query += f'ON {column1} = {column2} '
         return self
     
     
@@ -136,7 +136,7 @@ class Query:
         Returns:
             Query: Instance de la classe.
         """
-        self.__query += f' {type} JOIN {table}'
+        self.__query += f'{type} JOIN {table} '
         return self
     
     
@@ -151,7 +151,7 @@ class Query:
         Returns:
             Query: Instance de la classe.
         """
-        self.__query += f' HAVING {column} {type} {value}'
+        self.__query += f'HAVING {column} {type} {value} '
         return self
     
     
@@ -164,13 +164,13 @@ class Query:
         Returns:
             Query: Instance de la classe.
         """
-        self.__query += ' GROUP BY '
+        self.__query += 'GROUP BY '
         if not type(columns) is tuple:
-            self.__query += str(columns)
+            self.__query += f'{columns} '
         else:
             for column in columns:
                 self.__query += f'{column}, '
-            self.__query = self.__query[:-2]
+            self.__query = f'{self.__query[:-2]} '
         return self
     
     
@@ -184,14 +184,14 @@ class Query:
         Returns:
             Query: Instance de la classe.
         """
-        self.__query += ' ORDER BY '
+        self.__query += 'ORDER BY '
         if not type(columns) is tuple:
-            self.__query += str(columns)
+            self.__query += f'{columns}'
         else:
             for column in columns:
                 self.__query += f'{column}, '
             self.__query = self.__query[:-2]
-        self.__query += f' {direction}'
+        self.__query += f' {direction} '
         return self
             
     
@@ -205,17 +205,16 @@ class Query:
         Returns:
             Query: Instance de la classe.
         """
-        self.__query += f' LIMIT {offset}, {count}'
+        self.__query += f'LIMIT {offset}, {count} '
         return self
     
     
-    def insert(self, table : str, columns : tuple, values : tuple) -> 'Query':
+    def insert(self, table : str, columns : tuple) -> 'Query':
         """Ajoute la clause INSERT INTO à la requête.
         
         Args:
             table (str): Nom de la table.
             columns (tuple): Liste des colonnes.
-            values (tuple): Liste des valeurs.
         
         Returns:
             Query: Instance de la classe.
@@ -223,10 +222,23 @@ class Query:
         self.__query += f'INSERT INTO {table} ('
         for column in columns:
             self.__query += f'{column}, '
-        self.__query = self.__query[:-2] + ') VALUES ('
+        self.__query = f'{self.__query[:-2] }) '
+        return self
+    
+    
+    def values(self, values : tuple) -> 'Query':
+        """Ajoute la clause VALUES à la requête.
+        
+        Args:
+            values (tuple): Liste des valeurs.
+        
+        Returns:
+            Query: Instance de la classe.
+        """
+        self.__query += 'VALUES ('
         for value in values:
             self.__query += f'{value}, '
-        self.__query = self.__query[:-2] + ')'
+        self.__query = f'{self.__query[:-2]}) '
         return self
     
     
@@ -244,7 +256,7 @@ class Query:
         self.__query += f'UPDATE {table} SET '
         for i in range(len(columns)):
             self.__query += f'{columns[i]} = {values[i]}, '
-        self.__query = self.__query[:-2]
+        self.__query = f'{self.__query[:-2]} '
         return self
     
     
@@ -257,7 +269,7 @@ class Query:
         Returns:
             Query: Instance de la classe.
         """
-        self.__query += f'DELETE FROM {table}'
+        self.__query += f'DELETE FROM {table} '
         return self
     
     
@@ -270,7 +282,7 @@ class Query:
         Returns:
             Query: Instance de la classe.
         """
-        self.__query += f'TRUNCATE TABLE {table}'
+        self.__query += f'TRUNCATE TABLE {table} '
         return self
     
     
@@ -283,7 +295,7 @@ class Query:
         Returns:
             Query: Instance de la classe.
         """
-        self.__query += f'DROP TABLE {table}'
+        self.__query += f'DROP TABLE {table} '
         return self
     
     
@@ -293,7 +305,7 @@ class Query:
         Returns:
             Query: Instance de la classe.
         """
-        self.__query += '('
+        self.__query += '( '
         return self
     
     
@@ -303,5 +315,5 @@ class Query:
         Returns:
             Query: Instance de la classe.
         """
-        self.__query += ')'
+        self.__query += ') '
         return self

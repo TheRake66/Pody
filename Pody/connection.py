@@ -46,6 +46,29 @@ class Connection:
         else:
             raise Exception(f'Aucune connexion à la base de données "{database}" n\'a été établie !')
 
+
+    @classmethod
+    def closeAllInstances(cls) -> None:
+        """Ferme toutes les instances de connexion à la base de données.
+        """
+        logging.info('Fermeture de toutes les instances de connexion à la base de données...')
+        for instance in cls.__instances.values():
+            instance.closeSocket()
+        logging.info('Fermeture des instances de connexion à la base de données terminée.')
+        
+    
+    @classmethod
+    def closeInstance(cls, database : str) -> None:
+        """Ferme l'instance de connexion à la base de données correspondant au nom de la base de données.
+
+        Args:
+            database (str): Nom de la base de données.
+        """
+        if database in cls.__instances:
+            return cls.__instances[database].closeSocket()
+        else:
+            raise Exception(f'Aucune connexion à la base de données "{database}" n\'a été établie !')
+        
     
     def __init__(self, configuration : Configuration) -> None:
         """Constructeur de la classe.
@@ -66,11 +89,11 @@ class Connection:
                 password = configuration.getPassword()
             )
             self.__connection.autocommit = configuration.isAutocommit()
-            self.__cursor = self.__connection.cursor(
-                prepared = configuration.isPrepared())
-            Connection.__instances[configuration.getDatabase()] = self
+            self.__cursor = self.__connection.cursor(prepared = configuration.isPrepared())
+            self.__instances[configuration.getDatabase()] = self
+            logging.info(f'Connexion à la base de données établie.')
         except mysql.connector.Error as error:
-            logging.error(f'Impossible de se connecter à la base de données "{configuration.getDatabase()}" !')
+            logging.error(f'Impossible de se connecter à la base de données !')
             logging.error(error)
             raise error
     
@@ -177,3 +200,13 @@ class Connection:
         """
         logging.info('Annulation manuelle des modifications...')
         self.__connection.rollback()
+        
+        
+    def closeSocket(self) -> None:
+        """Ferme le socket de connexion à la base de données.
+        """
+        logging.info(f'Fermeture du socket de connexion de la base de données "{self.__configuration.getDatabase()}"...')
+        self.__cursor.close()
+        self.__connection.close()
+        self.__instances.pop(self.__configuration.getDatabase())
+        logging.info('Socket de connexion fermé.')

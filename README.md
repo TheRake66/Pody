@@ -193,7 +193,15 @@ Utilisateur(2).exists()
 
 # Compte le nombre d'utilisateurs ayant le nom « Dupont »
 Utilisateur(None, 'Dupont').count('nom')
+```
 
+Si besoin, on peut également convertir un modèle en JSON :
+```py
+# Cast de l'utilisateur en string JSON
+json = str(user)
+
+# Affichage de l'utilisateur directement en JSON
+print(user)
 ```
 
 Maintenant un exemple de l'une classe de modèle :
@@ -210,4 +218,20 @@ Utilisateur.clear()
 
 # Exécution d'une requête sur la connexion de la base liée à ce modèle
 Utilisateur.execute(Query('...'))
+```
+
+
+### Déconnexion de la base de données
+
+Une fois le programme terminé, il faut fermer la connexion :
+
+```py
+# Fermeture de la connexion de l'objet « socket »
+socket.closeSocket()
+
+# Ferme la connexion de la base de données « bdd »
+Connection.closeInstance('bdd')
+
+# Ferme toutes les connexions
+Connection.closeAllInstances()
 ```

@@ -73,7 +73,9 @@ class Model:
         """Création d'un modèle dans la base de données.
         """
         reflection = Reflection(self)
-        query = Query().insert(reflection.getTable(), reflection.getColumns(), Reflection.generateMark(reflection.getValues()))
+        query = Query() \
+            .insert(reflection.getTable(), reflection.getColumns()) \
+            .values(Reflection.generateMark(reflection.getValues()))
         self.__runOn(query, reflection.getValues(), reflection)
         logging.info('Création d\'un modèle dans la base de données.')
         
