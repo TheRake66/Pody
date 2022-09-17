@@ -24,7 +24,6 @@ class Converter:
         Returns:
             object: Le modèle converti.
         """
-        logging.info(f'Conversion des données vers le modèle "{self.__model.__class__.__name__}"...')
         newmodel = self.__model()
         for key, value in data.items():
             if hasattr(newmodel, key):
@@ -33,5 +32,4 @@ class Converter:
                 setattr(newmodel, f'_{key}', value)
             else:
                 logging.warning(f'La propriété "{key}" n\'existe pas dans le modèle "{self.__model.__class__.__name__}".')
-        logging.info(f'Les données ont été converties.')
         return newmodel

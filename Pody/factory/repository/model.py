@@ -53,7 +53,7 @@ class Model:
         """
         reflection = Reflection(cls)
         query = Query().truncate(reflection.getTable())
-        cls().__runOn(query, reflection)
+        cls().__runOn(query, (), reflection)
         logging.info('Vidage de la table des modèles dans la base de données.')
     
     

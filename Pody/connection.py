@@ -93,9 +93,9 @@ class Connection:
                 prepared = configuration.isPrepared(),
                 buffered = configuration.isBuffered())
             self.__instances[configuration.getDatabase()] = self
-            logging.info(f'Connexion à la base de données établie.')
+            logging.info(f'La connexion a été établie.')
         except mysql.connector.Error as error:
-            logging.error(f'Impossible de se connecter à la base de données !')
+            logging.error(f'Impossible de se connecter !')
             logging.error(error)
             raise error
     
@@ -190,7 +190,7 @@ class Connection:
         return Converter(class_).convertWith(row) if not row is None else None
     
     
-    def commitChange(self) -> None:
+    def commitChanges(self) -> None:
         """Valide manuellement les modifications de la base de données.
         """
         logging.info('Validation manuelle des modifications...')
@@ -198,7 +198,7 @@ class Connection:
         logging.info('Modifications validées.')
         
         
-    def rollbackChange(self) -> None:
+    def rollbackChanges(self) -> None:
         """Annule manuellement les modifications de la base de données.
         """
         logging.info('Annulation manuelle des modifications...')
