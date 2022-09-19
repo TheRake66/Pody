@@ -9,22 +9,22 @@ class Configuration:
     
     
     def __init__(self, 
-                database : str = 'test', 
-                user : str = 'root', 
-                password : str = '',
-                host : str = 'localhost',
-                port : int = 3306,
-                autocommit : bool = True,
-                prepared : bool = True,
-                buffered : bool = False) -> None:
+        database : str = 'bdd', 
+        user : str = 'root', 
+        password : str = '',
+        host : str = 'localhost',
+        port : int = 3306,
+        autocommit : bool = True,
+        prepared : bool = True,
+        buffered : bool = False) -> None:
         """Constructeur de la classe.
 
         Args:
-            database (str, optional): Nom de la base de données. Par défaut '***REMOVED***'.
-            user (str, optional): Nom d'utilisateur. Par défaut '***REMOVED***'.
-            password (str, optional): Mot de passe. Par défaut '***REMOVED***'.
-            host (str, optional): Adresse IP du serveur. Par défaut '***REMOVED***'.
-            port (int, optional): Port du serveur. Par défaut ***REMOVED***.
+            database (str, optional): Nom de la base de données. Par défaut 'bdd'.
+            user (str, optional): Nom d'utilisateur. Par défaut 'root'.
+            password (str, optional): Mot de passe. Vide par défaut.
+            host (str, optional): Adresse IP du serveur. Par défaut 'localhost'.
+            port (int, optional): Port du serveur. Par défaut 3306.
             autocommit (bool, optional): Activation de l'autocommit. Par défaut False.
             prepared (bool, optional): Activation des requêtes préparées. Par défaut True.
             buffered (bool, optional): Activation de la mise en mémoire tampon. Par défaut False.
