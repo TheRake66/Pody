@@ -71,7 +71,7 @@ print(f'''{Y}                                  ~ Copyright © 2022 - Thibault BU
 {W}''')
 
 
-database = ask('Nom de la base de données ("test" par défaut) : ', 'test')
+database = ask('Nom de la base de données ("bdd" par défaut) : ', 'bdd')
 user = ask('Nom d\'utilisateur ("root" par défaut) : ', 'root')
 password = ask('Mot de passe (vide par défaut) : ', '')
 host = ask('Adresse IP du serveur ("localhost" par défaut) : ', 'localhost')
