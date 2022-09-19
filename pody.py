@@ -37,17 +37,17 @@ def ask(text : str, default : any = None, isInt : bool = False) -> str:
 W  = '\033[0m'  # white (default)
 R  = '\033[31m' # red
 G  = '\033[32m' # green
-O  = '\033[33m' # orange
+Y  = '\033[33m' # yellow
 B  = '\033[34m' # blue
 P  = '\033[35m' # purple
-Y  = '\033[93m' # yellow
+C  = '\033[36m' # cyan
 
 
 logging.basicConfig()
 logging.getLogger().setLevel(logging.INFO)
 
 
-print(f'''{O}
+print(f'''{Y}
                                    ▄▄▄▄▄▄▄▄▄▄▄                         ▄▄
                                    ████████████▄                       ██
                                    ███ ▄▄▄▄▄▄ ▀██                      ██
@@ -62,9 +62,9 @@ print(f'''{O}
                                                                              ███
                                                                            ▄███
                                                                            ▀▀▀
-{W}''')
-print(f'''{R}                                                 ░░░▒▒▓▓ Pody ▓▓▒▒░░░{W}''')
-print(f'''{Y}                                       ~ Version 1.0.0.0 du 15 septembre 2022 ~{W}''')
+''')
+print(f'''{R}                                                 ░░░▒▒▓▓ Pody ▓▓▒▒░░░''')
+print(f'''{Y}                                       ~ Version 1.0.0.0 du 15 septembre 2022 ~''')
 print(f'''{Y}                                  ~ Copyright © 2022 - Thibault BUSTOS (TheRake66) ~
       
       
