@@ -138,14 +138,15 @@ class Connection:
         Returns:
             Connection: Instance de connexion à la base de données.
         """
+        query = str(query).strip()
         logging.info(f'Exécution de la requête "{query}"...')
         logging.info(f'Paramètres de la requête "{parameters}"...')
         if not multiple:
             if not type(parameters) is tuple:
                 parameters = (parameters,)
-            self.__cursor.execute(str(query), parameters)
+            self.__cursor.execute(query, parameters)
         else:
-            self.__cursor.executemany(str(query), parameters)
+            self.__cursor.executemany(query, parameters)
         logging.info(f'Exécution de la requête terminée.')
         return self
     
