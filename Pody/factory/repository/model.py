@@ -1,5 +1,6 @@
 import json
 import logging
+from symbol import parameters
 from typing import Union
 
 from Pody.connection import Connection
@@ -58,15 +59,31 @@ class Model:
     
     
     @classmethod
-    def execute(cls, query : Query, parameters : tuple = None) -> None:
+    def execute(cls, query : Query, parameters : tuple = None, multiple : bool = False) -> None:
         """Exécution d'une requête.
 
         Args:
             query (Query): La requête.
             parameters (tuple, optional): Les paramètres. Par défaut None.
+            multiple (bool, optional): Indique si lors d'une insertion, plusieurs lignes doivent être insérées. Par défaut False.
         """
-        cls().__runOn(query, parameters)
+        cls().__runOn(query, parameters, None, multiple)
         logging.info('Exécution d\'une requête sur la table des modèles dans la base de données.')
+        
+    
+    @classmethod
+    def inject(cls, objects : list) -> None:
+        """Injection de modèles dans la base de données.
+
+        Args:
+            objects (list): La liste des modèles.
+        """
+        reflection = Reflection(cls)
+        query = Query() \
+            .insert(reflection.getTable(), reflection.getColumns()) \
+            .values(Reflection.generateMark(reflection.getValues()))
+        cls().__runOn(query, [ Reflection(object).getValues() for object in objects], reflection, True)
+        logging.info('Injection de modèles dans la base de données.')
 
     
     def create(self) -> None:
@@ -192,13 +209,14 @@ class Model:
         return count
     
     
-    def __runOn(self, query : Query, parameters : any = (), reflection : Reflection = None) -> Connection:
+    def __runOn(self, query : Query, parameters : any = (), reflection : Reflection = None, multiple : bool = False) -> Connection:
         """Exécute une requête sur la base de données liée au modèle.
 
         Args:
             query (Query): La requête à exécuter.
             parameters (any, optional): Les paramètres de la requête. Par défaut ().
             reflection (Reflection, optional): La réflexion existante du modèle. Par défaut None.
+            multiple (bool, optional): Indique si lors d'une insertion, plusieurs lignes doivent être insérées. Par défaut False.
             
         Returns:
             Connection: La connexion à la base de données.
@@ -206,7 +224,7 @@ class Model:
         if reflection is None:
             reflection = Reflection(self)
         connection = Connection.getInstance(reflection.getDatabase())
-        connection.runQuery(query, parameters)
+        connection.runQuery(query, parameters, multiple)
         return connection
     
     

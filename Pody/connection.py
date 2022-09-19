@@ -127,21 +127,25 @@ class Connection:
         return self.__cursor
     
     
-    def runQuery(self, query : Query, parameters : any = ()) -> 'Connection':
+    def runQuery(self, query : Query, parameters : any = (), multiple = False) -> 'Connection':
         """Exécute une requête SQL.
 
         Args:
             query (Query): Objet de requête.
             parameters (any, optional): Liste des paramètres de la requête. Par défaut, la liste est vide.
+            multiple (bool, optional): Indique si lors d'une insertion, plusieurs lignes doivent être insérées. Par défaut, False.
        
         Returns:
             Connection: Instance de connexion à la base de données.
         """
         logging.info(f'Exécution de la requête "{query}"...')
-        if not type(parameters) is tuple:
-            parameters = (parameters,)
         logging.info(f'Paramètres de la requête "{parameters}"...')
-        self.__cursor.execute(str(query), parameters)
+        if not multiple:
+            if not type(parameters) is tuple:
+                parameters = (parameters,)
+            self.__cursor.execute(str(query), parameters)
+        else:
+            self.__cursor.executemany(str(query), parameters)
         logging.info(f'Exécution de la requête terminée.')
         return self
     

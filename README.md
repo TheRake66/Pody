@@ -216,6 +216,9 @@ Utilisateur.size()
 # Suppression de tous les utilisateurs
 Utilisateur.clear()
 
+# Injecte plusieurs utilisateurs
+Utilisateur.inject([ user1, user2, user3 ])
+
 # Exécution d'une requête sur la connexion de la base liée à ce modèle
 Utilisateur.execute(Query('...'))
 ```
