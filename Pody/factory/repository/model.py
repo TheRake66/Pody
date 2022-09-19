@@ -1,6 +1,5 @@
 import json
 import logging
-from symbol import parameters
 from typing import Union
 
 from Pody.connection import Connection
