@@ -82,7 +82,7 @@ class Model:
         query = Query() \
             .insert(reflection.getTable(), reflection.getColumns()) \
             .values(Reflection.generateMark(reflection.getValues()))
-        cls().__runOn(query, [ Reflection(object).getValues() for object in objects], reflection, True)
+        cls().__runOn(query, [ Reflection(object).getValues() for object in objects ], reflection, True)
         logging.info('Injection de modèles dans la base de données.')
 
     
