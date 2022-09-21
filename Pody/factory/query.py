@@ -24,7 +24,7 @@ class Query:
         Returns:
             str: La requête.
         """
-        return self.__query
+        return self.__query.strip()
     
     
     def select(self, columns : tuple = None) -> 'Query':

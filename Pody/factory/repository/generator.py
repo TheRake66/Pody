@@ -35,7 +35,7 @@ class Generator:
         
         if tables is None:
             tables = self.__connection.runQuery('SHOW TABLES').fetchAll()
-        elif type(tables) is str:
+        elif not type(tables) is tuple:
             tables = (tables,)
             
         for table in tables:
