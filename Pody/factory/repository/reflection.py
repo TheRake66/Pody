@@ -34,7 +34,7 @@ class Reflection:
         Returns:
             str: Nom de la table liée au modèle.
         """
-        return self.__model.__class__.__name__
+        return self.__model.__class__.__name__.lower()
     
     
     def getColumns(self) -> tuple:

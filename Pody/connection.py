@@ -86,10 +86,12 @@ class Connection:
                 host = configuration.getHost(),
                 database = configuration.getDatabase(),
                 user = configuration.getUser(),
-                password = configuration.getPassword()
+                password = configuration.getPassword(),
+                port = configuration.getPort()
             )
             self.__connection.autocommit = configuration.isAutocommit()
             self.__cursor = self.__connection.cursor(
+                dictionary = False,
                 prepared = configuration.isPrepared(),
                 buffered = configuration.isBuffered())
             self.__instances[configuration.getDatabase()] = self
