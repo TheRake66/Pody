@@ -25,7 +25,7 @@ class Configuration:
             password (str, optional): Mot de passe. Vide par défaut.
             host (str, optional): Adresse IP du serveur. Par défaut 'localhost'.
             port (int, optional): Port du serveur. Par défaut 3306.
-            autocommit (bool, optional): Activation de l'autocommit. Par défaut False.
+            autocommit (bool, optional): Activation de l'autocommit. Par défaut True.
             prepared (bool, optional): Activation des requêtes préparées. Par défaut True.
             buffered (bool, optional): Activation de la mise en mémoire tampon. Par défaut False.
         """
