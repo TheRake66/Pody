@@ -154,7 +154,7 @@ class Connection:
             self.__cursor.execute(sql, parameters)
             if hastimer: stop = time()
         else:
-            logging.info(f'Exécution multiples, paramètres non affichables...')
+            logging.info(f'Exécution multiple, paramètres non affichables...')
             size = config.getMaxpacket()
             lenght = round(size / len(parameters[0]))
             composites = [ parameters[x:x+lenght] for x in range(0, count, lenght) ]
