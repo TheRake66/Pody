@@ -1,4 +1,5 @@
 import logging
+from time import time
 import mysql
 import mysql.connector
 from typing import List, Dict, Tuple, Union, Optional
@@ -129,26 +130,41 @@ class Connection:
         return self.__cursor
     
     
-    def runQuery(self, query : Query, parameters : any = (), multiple = False) -> 'Connection':
+    def runQuery(self, query : Query, parameters : tuple = ()) -> 'Connection':
         """Exécute une requête SQL.
 
         Args:
             query (Query): Objet de requête.
-            parameters (any, optional): Liste des paramètres de la requête. Par défaut, la liste est vide.
-            multiple (bool, optional): Indique si lors d'une insertion, plusieurs lignes doivent être insérées. Par défaut, False.
+            parameters (tuple, optional): Liste des paramètres de la requête. Par défaut, la liste est vide.
        
         Returns:
             Connection: Instance de connexion à la base de données.
         """
         logging.info(f'Exécution de la requête "{query}"...')
-        logging.info(f'Paramètres de la requête "{parameters}"...')
-        if not multiple:
-            if not type(parameters) is tuple:
-                parameters = (parameters,)
-            self.__cursor.execute(str(query), parameters)
+        config = self.getConfigurations()
+        count = len(parameters)
+        hastimer = config.hasTimer()
+        sql = str(query)
+        start, stop = 0, 0
+        if type(parameters) is not tuple:
+            parameters = (parameters,)
+        if count == 0 or type(parameters[0]) is not tuple:
+            logging.info(f'Paramètres de la requête "{parameters}"...')
+            if hastimer: start = time()
+            self.__cursor.execute(sql, parameters)
+            if hastimer: stop = time()
         else:
-            self.__cursor.executemany(str(query), parameters)
+            size = config.getMaxpacket()
+            lenght = round(size / len(parameters[0]))
+            composites = [ parameters[x:x+lenght] for x in range(0, count, lenght) ]
+            if hastimer: start = time()
+            for composite in composites:
+                self.__cursor.executemany(sql, composite)
+            if hastimer: stop = time()
         logging.info(f'Exécution de la requête terminée.')
+        if hastimer:
+            seconds = round(stop - start, 3)
+            logging.info(f'Temps d\'exécution de la requête : {seconds} secondes.')
         return self
     
 

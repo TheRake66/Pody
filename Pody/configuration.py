@@ -16,7 +16,9 @@ class Configuration:
         port : int = 3306,
         autocommit : bool = True,
         prepared : bool = True,
-        buffered : bool = False) -> None:
+        buffered : bool = False,
+        maxpacket : int = 65535,
+        timer : bool = True) -> None:
         """Constructeur de la classe.
 
         Args:
@@ -28,6 +30,8 @@ class Configuration:
             autocommit (bool, optional): Activation de l'autocommit. Par défaut True.
             prepared (bool, optional): Activation des requêtes préparées. Par défaut True.
             buffered (bool, optional): Activation de la mise en mémoire tampon. Par défaut False.
+            maxpacket (int, optional): Taille maximale des paquets. Par défaut 65535.
+            timer (bool, optional): Activation du chronomètre. Par défaut True.
         """
         self.__database = database
         self.__user = user
@@ -37,6 +41,8 @@ class Configuration:
         self.__autocommit = autocommit
         self.__prepared = prepared
         self.__buffered = buffered
+        self.__maxpacket = maxpacket
+        self.__timer = timer
         
     
     def getDatabase(self) -> str:
@@ -109,3 +115,21 @@ class Configuration:
             bool: État de la mise en mémoire tampon.
         """
         return self.__buffered
+    
+    
+    def getMaxpacket(self) -> int:
+        """Retourne la taille maximale des paquets.
+
+        Returns:
+            int: Taille maximale des paquets.
+        """
+        return self.__maxpacket
+    
+    
+    def hasTimer(self) -> bool:
+        """Retourne l'état du chronomètre.
+
+        Returns:
+            bool: État du chronomètre.
+        """
+        return self.__timer

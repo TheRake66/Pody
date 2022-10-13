@@ -92,9 +92,11 @@ try:
         else:
             subprocess.Popen(f'open {os.getcwd()}')
     except Exception as e:
+        print(f'{R}Erreur lors de la génération des modèles : {e}{W}')
         exit(2)
     
 except Exception as e:
+    print(f'{R}Erreur lors de la connexion à la base de données : {e}{W}')
     exit(1)
 
     
