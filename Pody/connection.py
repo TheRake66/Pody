@@ -186,6 +186,16 @@ class Connection:
         """
         row = self.__cursor.fetchone()
         return dict(zip(self.__cursor.column_names, row)) if not row is None else None
+    
+    
+    def fetchCell(self) -> Optional[Union[Tuple, Dict]]:
+        """Récupère la première cellule du premier résultat d'une requête SQL.
+
+        Returns:
+            Optional[Union[Tuple, Dict]]: Première cellule du premier résultat de la requête.
+        """
+        row = self.__cursor.fetchone()
+        return list(row.values())[0] if not row is None else None
         
     
     def fetchAllObjects(self, class_ : type) -> List[object]:
@@ -237,3 +247,21 @@ class Connection:
         self.__connection.close()
         self.__instances.pop(self.__configuration.getDatabase())
         logging.info('Socket de connexion fermé.')
+        
+        
+    def disableForeignKeysChecks(self) -> None:
+        """Désactive les contrôles de clés étrangères.
+        """
+        logging.info('Désactivation des contrôles de clés étrangères...')
+        query = Query('SET FOREIGN_KEY_CHECKS = 0')
+        self.runQuery(query)
+        logging.info('Contrôles de clés étrangères désactivés.')
+        
+        
+    def enableForeignKeysChecks(self) -> None:
+        """Active les contrôles de clés étrangères.
+        """
+        logging.info('Activation des contrôles de clés étrangères...')
+        query = Query('SET FOREIGN_KEY_CHECKS = 1')
+        self.runQuery(query)
+        logging.info('Contrôles de clés étrangères activés.')
