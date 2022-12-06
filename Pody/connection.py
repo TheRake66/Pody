@@ -130,6 +130,15 @@ class Connection:
         return self.__cursor
     
     
+    def getLastInsertId(self) -> int:
+        """Retourne l'identifiant de la dernière insertion.
+
+        Returns:
+            int: Identifiant de la dernière insertion.
+        """
+        return self.__cursor.lastrowid
+    
+    
     def runQuery(self, query : Query, parameters : tuple = ()) -> 'Connection':
         """Exécute une requête SQL.
 
