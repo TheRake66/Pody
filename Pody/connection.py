@@ -2,7 +2,7 @@ import logging
 from time import time
 import mysql
 import mysql.connector
-from typing import List, Dict, Tuple, Union, Optional
+from typing import List, Dict, Tuple, Union, Optional, Any
 from Pody.configuration import Configuration
 from Pody.factory.query import Query
 from Pody.factory.repository.converter import Converter
@@ -139,24 +139,24 @@ class Connection:
         return self.__cursor.lastrowid
     
     
-    def runQuery(self, query : Query, parameters : tuple = ()) -> 'Connection':
+    def runQuery(self, query : Query, parameters : Union[tuple, Any] = ()) -> 'Connection':
         """Exécute une requête SQL.
 
         Args:
             query (Query): Objet de requête.
-            parameters (tuple, optional): Liste des paramètres de la requête. Par défaut, la liste est vide.
+            parameters  (Union[tuple, Any], optional): Liste des paramètres de la requête. Par défaut, la liste est vide.
        
         Returns:
             Connection: Instance de connexion à la base de données.
         """
         logging.info(f'Exécution de la requête "{query}"...')
+        if type(parameters) is not tuple:
+            parameters = (parameters,)
         config = self.getConfigurations()
         count = len(parameters)
         hastimer = config.hasTimer()
         sql = str(query)
         start, stop = 0, 0
-        if type(parameters) is not tuple:
-            parameters = (parameters,)
         if count == 0 or type(parameters[0]) is not tuple:
             logging.info(f'Paramètres de la requête "{parameters}"...')
             if hastimer: start = time()
