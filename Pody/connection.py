@@ -204,7 +204,7 @@ class Connection:
             Optional[Union[Tuple, Dict]]: Première cellule du premier résultat de la requête.
         """
         row = self.__cursor.fetchone()
-        return list(row.values())[0] if not row is None else None
+        return row[0] if not row is None else None
         
     
     def fetchAllObjects(self, class_ : type) -> List[object]:

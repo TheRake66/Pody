@@ -181,9 +181,9 @@ class Model:
             .from_(reflection.getTable())
         where, values = self.__findClause(column, clause)
         connection = self.__runOn(Query(f'{query} {where}'), values, reflection)
-        object = connection.fetchOneObject(self.__class__)
+        cell = connection.fetchCell()
         logging.info('Vérification de l\'existence d\'un modèle dans la base de données.')
-        return object is not None
+        return cell == 1
     
     
     def count(self, column : Union[str, tuple] = None, clause: Union[Clause, tuple] = Clause.EQUAL) -> int:
