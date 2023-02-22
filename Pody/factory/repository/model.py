@@ -207,6 +207,21 @@ class Model:
         return count
     
     
+    def __getInstance(self, reflection : Reflection = None) -> Connection:
+        """Récupère l'instance du modèle.
+
+        Args:
+            reflection (Reflection, optional): La réflexion du modèle. Par défaut None.
+            
+        Returns:
+            Connection: La connexion à la base de données.
+        """
+        if reflection is None:
+            reflection = Reflection(self)
+        connection = Connection.getInstance(reflection.getDatabase())
+        return connection
+    
+    
     def __runOn(self, query : Query, parameters : tuple = (), reflection : Reflection = None) -> Connection:
         """Exécute une requête sur la base de données liée au modèle.
 
@@ -218,9 +233,7 @@ class Model:
         Returns:
             Connection: La connexion à la base de données.
         """
-        if reflection is None:
-            reflection = Reflection(self)
-        connection = Connection.getInstance(reflection.getDatabase())
+        connection = self.__getInstance()
         connection.runQuery(query, parameters)
         return connection
     
@@ -276,4 +289,9 @@ class Model:
         Returns:
             str: Je JSON du modèle.
         """
-        return json.dumps(self.__dict__)
+        connection = self.__getInstance()
+        configuration = connection.getConfiguration()
+        if configuration.isBeautify():
+            return json.dumps(self.__dict__, sort_keys=True, indent=4)
+        else:
+            return json.dumps(self.__dict__)

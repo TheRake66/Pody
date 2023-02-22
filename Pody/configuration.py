@@ -18,7 +18,8 @@ class Configuration:
         prepared : bool = True,
         buffered : bool = False,
         maxpacket : int = 65535,
-        timer : bool = True) -> None:
+        timer : bool = True,
+        beautify : bool = False) -> None:
         """Constructeur de la classe.
 
         Args:
@@ -32,6 +33,7 @@ class Configuration:
             buffered (bool, optional): Activation de la mise en mémoire tampon. Par défaut False.
             maxpacket (int, optional): Taille maximale des paquets. Par défaut 65535.
             timer (bool, optional): Activation du chronomètre. Par défaut True.
+            beautify (bool, optional): Activation de la mise en forme des objets. Par défaut False.
         """
         self.__database = database
         self.__user = user
@@ -43,6 +45,7 @@ class Configuration:
         self.__buffered = buffered
         self.__maxpacket = maxpacket
         self.__timer = timer
+        self.__beautify = beautify
         
     
     def getDatabase(self) -> str:
@@ -133,3 +136,12 @@ class Configuration:
             bool: État du chronomètre.
         """
         return self.__timer
+    
+    
+    def isBeautify(self) -> bool:
+        """Retourne l'état de la mise en forme des objets.
+        
+        Returns:
+            bool: État de la mise en forme des objets.
+        """
+        return self.__beautify

@@ -26,7 +26,7 @@ class Generator:
         Args:
             tables (Union[str, tuple]): Le nom de la table ou les tables. Si None, toutes les tables seront générées.
         """
-        configuration = self.__connection.getConfigurations()
+        configuration = self.__connection.getConfiguration()
         database = configuration.getDatabase().lower()
         if not os.path.exists(database):
             logging.info(f'Création du dépôt "{database}"...')

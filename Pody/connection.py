@@ -103,7 +103,7 @@ class Connection:
             raise error
     
     
-    def getConfigurations(self) -> Configuration:
+    def getConfiguration(self) -> Configuration:
         """Retourne l'objet de configuration de la connexion à la base de données.
 
         Returns:
@@ -152,7 +152,7 @@ class Connection:
         logging.info(f'Exécution de la requête "{query}"...')
         if type(parameters) is not tuple:
             parameters = (parameters,)
-        config = self.getConfigurations()
+        config = self.getConfiguration()
         count = len(parameters)
         hastimer = config.hasTimer()
         sql = str(query)
