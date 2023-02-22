@@ -34,12 +34,15 @@ class Generator:
             logging.info(f'Le dépôt a été créé.')
         
         if tables is None:
-            tables = self.__connection.runQuery('SHOW TABLES').fetchAll()
+            data = self.__connection \
+                .runQuery('SHOW TABLES') \
+                .fetchAll() 
+            tables = tuple(map(lambda x: list(x.values())[0], data))
         elif not type(tables) is tuple:
             tables = (tables,)
             
         for table in tables:
-            name = list(table.values())[0].lower()
+            name = table.lower()
                 
             model = f'{database}/{name}.py'
             if not os.path.exists(model):
@@ -65,47 +68,47 @@ class Generator:
                     attributes = []
                     docstring = []
                     for column in columns:          
-                        name = column['Field'].lower()
-                        type = column['Type'].split('(')[0].lower()
+                        field = column['Field'].lower()
+                        type_ = column['Type'].split('(')[0].lower()
                         default = column['Default']
                         key = column['Key']
                         extra = column['Extra']
                         null = column['Null']
                         
-                        logging.info(f'Génération de l\'attribut "{name}"...')
+                        logging.info(f'Génération de l\'attribut "{field}"...')
                         
                         if key == 'PRI':
-                            name = f'_{name}'
+                            field = f'_{field}'
                         
-                        if type in [ 'varchar', 'char', 'text' ]:
-                            type = 'str'
-                        elif type in [ 'double', 'decimal' ]:
-                            type = 'float'
-                        elif type in [ 'tinyint' ]:
-                            type = 'bool'
-                        elif type in [ 'smallint', 'int', 'mediumint', 'bigint' ]:
-                            type = 'int'
-                        elif type in [ 'date', 'datetime', 'timestamp' ]:
-                            type = 'datetime'
+                        if type_ in [ 'varchar', 'char', 'text' ]:
+                            type_ = 'str'
+                        elif type_ in [ 'double', 'decimal' ]:
+                            type_ = 'float'
+                        elif type_ in [ 'tinyint' ]:
+                            type_ = 'bool'
+                        elif type_ in [ 'smallint', 'int', 'mediumint', 'bigint' ]:
+                            type_ = 'int'
+                        elif type_ in [ 'date', 'datetime', 'timestamp' ]:
+                            type_ = 'datetime'
                         else:
-                            type = 'str'
+                            type_ = 'str'
                             
                         if default is None:
                             default = 'None'
-                        elif type == 'str':
+                        elif type_ == 'str':
                             default = f"'{default}'"
-                        elif type == 'bool':
+                        elif type_ == 'bool':
                             default = 'True' if default else 'False'
-                        elif type == 'datetime':
+                        elif type_ == 'datetime':
                             default = f'datetime.datetime({default.year}, {default.month}, {default.day}, {default.hour}, {default.minute}, {default.second})'
-                        elif type == 'date':
+                        elif type_ == 'date':
                             default = f'datetime.date({default.year}, {default.month}, {default.day})'
-                        elif type == 'time':
+                        elif type_ == 'time':
                             default = f'datetime.time({default.hour}, {default.minute}, {default.second})'
                         
-                        parameters.append(f',\n        {name} : {type} = {default}')
-                        attributes.append(f'\n        self.{name} = {name}')
-                        docstring.append(f'\n            {name} ({type}, optional): Le champs "{name}". Par défaut {default}.')
+                        parameters.append(f',\n        {field} : {type_} = {default}')
+                        attributes.append(f'\n        self.{field} = {field}')
+                        docstring.append(f'\n            {field} ({type_}, optional): Le champs "{field}". Par défaut {default}.')
 
                         logging.info(f'L\'attribut a été généré.')
                 
