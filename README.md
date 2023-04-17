@@ -135,11 +135,11 @@ Une fois la connexion établie, vous pouvez créer des requêtes comme ceci :
 # WHERE id = 3
 # AND prenom LIKE '%upon%'
 
-# Via une chaine de caractère
+# Via une chaine de caractères
 query = Query('''
     SELECT nom
     FROM utilisateur
-    WHERE id < 3
+    WHERE id = 3
     AND prenom LIKE %s
     ''')
 
