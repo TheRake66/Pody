@@ -1,6 +1,7 @@
 import logging
 
 
+
 class Converter:
     """Librairie de conversion de données vers des modèles.
     """

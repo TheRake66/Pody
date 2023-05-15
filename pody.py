@@ -8,7 +8,6 @@ from Pody.connection import Connection
 from Pody.factory.repository.generator import Generator
 
 
-os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def ask(text : str, default : any = None, isInt : bool = False) -> str:
@@ -45,6 +44,9 @@ C  = '\033[36m' # cyan
 
 logging.basicConfig()
 logging.getLogger().setLevel(logging.INFO)
+
+
+os.system('cls' if os.name == 'nt' else 'clear')
 
 
 print(f'''{Y}
@@ -87,10 +89,9 @@ try:
         
     try:
         Generator(socket).generateModels(table)
-        if os.name == 'nt':
-            subprocess.Popen(f'explorer /select,"{database}"')
-        else:
-            subprocess.Popen(f'open {os.getcwd()}')
+        subprocess.Popen(
+            f'explorer /select,"{database}"' if os.name == 'nt' else
+            f'open {os.getcwd()}')
     except Exception as e:
         print(f'{R}Erreur lors de la génération des modèles : {e}{W}')
         exit(2)

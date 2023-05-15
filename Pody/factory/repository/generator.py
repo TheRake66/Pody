@@ -5,7 +5,7 @@ from typing import Union
 from Pody.connection import Connection
 
 
-    
+
 class Generator:
     """Librairie de génération de modèles.
     """

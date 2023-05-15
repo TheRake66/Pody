@@ -1,7 +1,7 @@
-import logging
 from Pody.factory.clause import Clause
 from Pody.factory.direction import Direction
 from Pody.factory.join import Join
+
 
 
 class Query:

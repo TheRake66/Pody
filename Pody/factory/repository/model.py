@@ -8,6 +8,7 @@ from Pody.factory.query import Query
 from Pody.factory.repository.reflection import Reflection
 
 
+
 class Model:
     """Gestion des méthodes liées au modèle de données.
     """
