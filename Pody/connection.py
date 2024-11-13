@@ -87,7 +87,8 @@ class Connection:
                 database = configuration.getDatabase(),
                 user = configuration.getUser(),
                 password = configuration.getPassword(),
-                port = configuration.getPort()
+                port = configuration.getPort(),
+                ssl_disabled = configuration.isUnsecured()
             )
             self.__cursor = self.__connection.cursor(
                 dictionary = False,

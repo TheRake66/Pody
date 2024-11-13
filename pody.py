@@ -78,20 +78,21 @@ user = ask('Nom d\'utilisateur ("root" par défaut) : ', 'root')
 password = ask('Mot de passe (vide par défaut) : ', '')
 host = ask('Adresse IP du serveur ("localhost" par défaut) : ', 'localhost')
 port = ask('Port (3306 par défaut) : ', 3306, True)
+unsecured = ask('Utiliser une connexion non sécurisée (Non par défaut) : ', 'Non').lower() == 'oui'
 
 
 try:
-    config = Configuration(database, user, password, host, port)
+    config = Configuration(database = database, user = user, password= password, host= host, port= port, unsecured = unsecured)
     socket = Connection(config)
     
-    all = ask('Générer le modèle de toutes les tables ? (O/N) (O par défaut) : ', 'O')
-    table = None if all == 'O' or all == 'o' else ask('Nom de la table à générer : ')
+    all = ask('Générer le modèle de toutes les tables ? (Oui par défaut) : ', 'Oui')
+    table = None if all.lower() == 'oui'  else ask('Nom de la table à générer : ')
         
     try:
         Generator(socket).generateModels(table)
         subprocess.Popen(
             f'explorer /select,"{database}"' if os.name == 'nt' else
-            f'open {os.getcwd()}')
+            f'xdg-open {os.getcwd()}')
     except Exception as e:
         print(f'{R}Erreur lors de la génération des modèles : {e}{W}')
         exit(2)

@@ -2,55 +2,72 @@
 
 
 class Configuration:
-    """Objet de configuration de la connexion à la base de données.
+    """Database connection configuration object.
+
+    Attributes:
+        database (str, optional): Database name. Default is 'db'.
+        user (str, optional): Username. Default is 'root'.
+        password (str, optional): Password. Empty by default.
+        host (str, optional): Server IP address. Default is 'localhost'.
+        port (int, optional): Server port. Default 3306.
+        maxpacket (int, optional): Maximum packet size. Default 65535.
+        unsecured (bool, optional): Disable SSL protocol. Default is False.
+        autocommit (bool, optional): Enable autocommit. Default is True.
+        prepared (bool, optional): Enable prepared statements. Default is True.
+        buffered (bool, optional): Enable buffering. Default is False.
+        timer (bool, optional): Enable timer. Default is True.
+        beautify (bool, optional): Enable object formatting. Default is False.
     """
     
     
     def __init__(self, 
-        database : str = 'bdd', 
-        user : str = 'root', 
-        password : str = '',
-        host : str = 'localhost',
-        port : int = 3306,
-        autocommit : bool = True,
-        prepared : bool = True,
-        buffered : bool = False,
-        maxpacket : int = 65535,
-        timer : bool = True,
-        beautify : bool = False) -> None:
-        """Constructeur de la classe.
+        database: str = 'db', 
+        user: str = 'root', 
+        password: str = '',
+        host: str = 'localhost',
+        port: int = 3306,
+        maxpacket: int = 65535,
+        unsecured: bool = False,
+        autocommit: bool = True,
+        prepared: bool = True,
+        buffered: bool = False,
+        timer: bool = True,
+        beautify: bool = False) -> None:
+        """Constructor of the class.
 
-        Args:
-            database (str, optional): Nom de la base de données. Par défaut 'bdd'.
-            user (str, optional): Nom d'utilisateur. Par défaut 'root'.
-            password (str, optional): Mot de passe. Vide par défaut.
-            host (str, optional): Adresse IP du serveur. Par défaut 'localhost'.
-            port (int, optional): Port du serveur. Par défaut 3306.
-            autocommit (bool, optional): Activation de l'autocommit. Par défaut True.
-            prepared (bool, optional): Activation des requêtes préparées. Par défaut True.
-            buffered (bool, optional): Activation de la mise en mémoire tampon. Par défaut False.
-            maxpacket (int, optional): Taille maximale des paquets. Par défaut 65535.
-            timer (bool, optional): Activation du chronomètre. Par défaut True.
-            beautify (bool, optional): Activation de la mise en forme des objets. Par défaut False.
+        Arguments:
+            database (str, optional): Database name. Default is 'db'.
+            user (str, optional): Username. Default is 'root'.
+            password (str, optional): Password. Empty by default.
+            host (str, optional): Server IP address. Default is 'localhost'.
+            port (int, optional): Server port. Default 3306.
+            maxpacket (int, optional): Maximum packet size. Default 65535.
+            unsecured (bool, optional): Disable SSL protocol. Default is False.
+            autocommit (bool, optional): Enable autocommit. Default is True.
+            prepared (bool, optional): Enable prepared statements. Default is True.
+            buffered (bool, optional): Enable buffering. Default is False.
+            timer (bool, optional): Enable timer. Default is True.
+            beautify (bool, optional): Enable object formatting. Default is False.
         """
         self.__database = database
         self.__user = user
         self.__password = password
         self.__host = host
         self.__port = port
+        self.__maxpacket = maxpacket
+        self.__unsecured = unsecured
         self.__autocommit = autocommit
         self.__prepared = prepared
         self.__buffered = buffered
-        self.__maxpacket = maxpacket
         self.__timer = timer
         self.__beautify = beautify
         
     
     def getDatabase(self) -> str:
-        """Retourne le nom de la base de données.
+        """Return database name.
 
         Returns:
-            str: Nom de la base de données.
+            str: Database name.
         """
         return self.__database
     
@@ -91,6 +108,24 @@ class Configuration:
         return self.__port
     
     
+    def getMaxpacket(self) -> int:
+        """Retourne la taille maximale des paquets.
+
+        Returns:
+            int: Taille maximale des paquets.
+        """
+        return self.__maxpacket
+    
+    
+    def isUnsecured(self) -> bool:
+        """Retourne l'état du protocole SSL.
+
+        Returns:
+            bool: État du protocole SSL.
+        """
+        return self.__unsecured
+    
+    
     def isAutocommit(self) -> bool:
         """Retourne l'état de l'autocommit.
 
@@ -116,15 +151,6 @@ class Configuration:
             bool: État de la mise en mémoire tampon.
         """
         return self.__buffered
-    
-    
-    def getMaxpacket(self) -> int:
-        """Retourne la taille maximale des paquets.
-
-        Returns:
-            int: Taille maximale des paquets.
-        """
-        return self.__maxpacket
     
     
     def hasTimer(self) -> bool:
