@@ -1,6 +1,6 @@
-from Pody.factory.clause import Clause
-from Pody.factory.direction import Direction
-from Pody.factory.join import Join
+from pody.factory.clause import Clause
+from pody.factory.direction import Direction
+from pody.factory.join import Join
 
 
 
@@ -12,7 +12,7 @@ class Query:
     def  __init__(self, query : str = '') -> None:
         """Constructeur de la classe.
         
-        Args:
+        Arguments:
             query (str, optional): Requête. Par défaut ''.
         """
         self.__query = query
@@ -30,7 +30,7 @@ class Query:
     def select(self, columns : tuple = None) -> 'Query':
         """Ajoute la clause SELECT à la requête.
         
-        Args:
+        Arguments:
             columns (tuple): Liste des colonnes à sélectionner.
         
         Returns:
@@ -51,7 +51,7 @@ class Query:
     def from_(self, tables : tuple) -> 'Query':
         """Ajoute la clause FROM à la requête.
         
-        Args:
+        Arguments:
             tables (tuple): Liste des tables à sélectionner.
         
         Returns:
@@ -70,7 +70,7 @@ class Query:
     def where(self, column : str, value : str, type : Clause = Clause.EQUAL) -> 'Query':
         """Ajoute la clause WHERE à la requête.
         
-        Args:
+        Arguments:
             column (str): Nom de la colonne.
             value (str): Valeur de la colonne.
             type (Clause, optional): Type de la clause. Par défaut Clause.EQUAL.
@@ -85,7 +85,7 @@ class Query:
     def and_(self, column : str, value : str, type : Clause = Clause.EQUAL) -> 'Query':
         """Ajoute la clause AND à la requête.
         
-        Args:
+        Arguments:
             column (str): Nom de la colonne.
             value (str): Valeur de la colonne.
             type (Clause, optional): Type de la clause. Par défaut Clause.EQUAL.
@@ -100,7 +100,7 @@ class Query:
     def or_(self, column : str, value : str, type : Clause = Clause.EQUAL) -> 'Query':
         """Ajoute la clause OR à la requête.
         
-        Args:
+        Arguments:
             column (str): Nom de la colonne.
             value (str): Valeur de la colonne.
             type (Clause, optional): Type de la clause. Par défaut Clause.EQUAL.
@@ -115,7 +115,7 @@ class Query:
     def on(self, column1 : str, column2 : str) -> 'Query':
         """Ajoute la clause ON à la requête.
         
-        Args:
+        Arguments:
             column1 (str): Nom de la colonne.
             column2 (str): Nom de la colonne.
         
@@ -129,7 +129,7 @@ class Query:
     def join(self, table : str, type : Join = Join.INNER) -> 'Query':
         """Ajoute la clause JOIN à la requête.
         
-        Args:
+        Arguments:
             table (str): Nom de la table.
             type (Join, optional): Type de la jointure. Par défaut Join.INNER.
         
@@ -143,7 +143,7 @@ class Query:
     def having(self, column : str, value : str, type : Clause = Clause.EQUAL) -> 'Query':
         """Ajoute la clause HAVING à la requête.
         
-        Args:
+        Arguments:
             column (str): Nom de la colonne.
             value (str): Valeur de la colonne.
             type (Clause, optional): Type de la clause. Par défaut Clause.EQUAL.
@@ -158,7 +158,7 @@ class Query:
     def group(self, columns : tuple) -> 'Query':
         """Ajoute la clause GROUP BY à la requête.
         
-        Args:
+        Arguments:
             columns (tuple): Liste des colonnes.
         
         Returns:
@@ -177,7 +177,7 @@ class Query:
     def order(self, columns : tuple, direction : Direction = Direction.ASC) -> 'Query':
         """Ajoute la clause ORDER BY à la requête.
         
-        Args:
+        Arguments:
             columns (tuple): Liste des colonnes.
             direction (Direction, optional): Direction de tri. Par défaut Direction.ASC.
         
@@ -198,7 +198,7 @@ class Query:
     def limit(self, count : int, offset : int = 0) -> 'Query':
         """Ajoute la clause LIMIT à la requête.
         
-        Args:
+        Arguments:
             count (int): Nombre de lignes à sélectionner.
             offset (int, optional): Nombre de lignes à sauter. Par défaut 0.
         
@@ -212,7 +212,7 @@ class Query:
     def insert(self, table : str, columns : tuple) -> 'Query':
         """Ajoute la clause INSERT INTO à la requête.
         
-        Args:
+        Arguments:
             table (str): Nom de la table.
             columns (tuple): Liste des colonnes.
         
@@ -229,7 +229,7 @@ class Query:
     def values(self, values : tuple) -> 'Query':
         """Ajoute la clause VALUES à la requête.
         
-        Args:
+        Arguments:
             values (tuple): Liste des valeurs.
         
         Returns:
@@ -245,7 +245,7 @@ class Query:
     def update(self, table : str, columns : tuple, values : tuple) -> 'Query':
         """Ajoute la clause UPDATE à la requête.
         
-        Args:
+        Arguments:
             table (str): Nom de la table.
             columns (tuple): Liste des colonnes.
             values (tuple): Liste des valeurs.
@@ -263,7 +263,7 @@ class Query:
     def delete(self, table : str) -> 'Query':
         """Ajoute la clause DELETE FROM à la requête.
         
-        Args:
+        Arguments:
             table (str): Nom de la table.
         
         Returns:
@@ -276,7 +276,7 @@ class Query:
     def truncate(self, table : str) -> 'Query':
         """Ajoute la clause TRUNCATE TABLE à la requête.
         
-        Args:
+        Arguments:
             table (str): Nom de la table.
         
         Returns:
@@ -289,7 +289,7 @@ class Query:
     def drop(self, table : str) -> 'Query':
         """Ajoute la clause DROP TABLE à la requête.
         
-        Args:
+        Arguments:
             table (str): Nom de la table.
         
         Returns:

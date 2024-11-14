@@ -2,10 +2,10 @@ import json
 import logging
 from typing import Union
 
-from Pody.connection import Connection
-from Pody.factory.clause import Clause
-from Pody.factory.query import Query
-from Pody.factory.repository.reflection import Reflection
+from pody.connection import Connection
+from pody.factory.clause import Clause
+from pody.factory.query import Query
+from pody.factory.repository.reflection import Reflection
 
 
 
@@ -62,7 +62,7 @@ class Model:
     def execute(cls, query : Query, parameters : tuple = ()) -> None:
         """Exécution d'une requête.
 
-        Args:
+        Arguments:
             query (Query): La requête.
             parameters (tuple, optional): Les paramètres. Par défaut, la liste est vide.
         """
@@ -74,7 +74,7 @@ class Model:
     def inject(cls, objects : list) -> None:
         """Injection de modèles dans la base de données.
 
-        Args:
+        Arguments:
             objects (list): La liste des modèles.
         """
         reflection = Reflection(cls)
@@ -99,7 +99,7 @@ class Model:
     def update(self, column : Union[str, tuple] = None, clause: Union[Clause, tuple] = Clause.EQUAL) -> None:
         """Mise à jour d'un modèle dans la base de données.
 
-        Args:
+        Arguments:
             column (Union[str, tuple], optional): La ou les colonnes à prendre en compte. Par défaut None.
             clause (Union[Clause, tuple], optional): Le ou les types de clause. Par défaut Clause.EQUAL.
         """
@@ -113,7 +113,7 @@ class Model:
     def delete(self, column : Union[str, tuple] = None, clause: Union[Clause, tuple] = Clause.EQUAL) -> None:
         """Suppression d'un modèle dans la base de données.
 
-        Args:
+        Arguments:
             column (Union[str, tuple], optional): La ou les colonnes à prendre en compte. Par défaut None.
             clause (Union[Clause, tuple], optional): Le ou les types de clause. Par défaut Clause.EQUAL.
         """
@@ -127,7 +127,7 @@ class Model:
     def read(self, column : Union[str, tuple] = None, clause: Union[Clause, tuple] = Clause.EQUAL) -> object:
         """Lecture d'un modèle dans la base de données.
 
-        Args:
+        Arguments:
             column (Union[str, tuple], optional): La ou les colonnes à prendre en compte. Par défaut None.
             clause (Union[Clause, tuple], optional): Le ou les types de clause. Par défaut Clause.EQUAL.
             
@@ -148,7 +148,7 @@ class Model:
     def many(self, column : Union[str, tuple] = None, clause: Union[Clause, tuple] = Clause.EQUAL) -> list:
         """Lecture de plusieurs modèles dans la base de données.
 
-        Args:
+        Arguments:
             column (Union[str, tuple], optional): La ou les colonnes à prendre en compte. Par défaut None.
             clause (Union[Clause, tuple], optional): Le ou les types de clause. Par défaut Clause.EQUAL.
             
@@ -169,7 +169,7 @@ class Model:
     def exists(self, column : Union[str, tuple] = None, clause: Union[Clause, tuple] = Clause.EQUAL) -> bool:
         """Vérification de l'existence d'un modèle dans la base de données.
 
-        Args:
+        Arguments:
             column (Union[str, tuple], optional): La ou les colonnes à prendre en compte. Par défaut None.
             clause (Union[Clause, tuple], optional): Le ou les types de clause. Par défaut Clause.EQUAL.
 
@@ -190,7 +190,7 @@ class Model:
     def count(self, column : Union[str, tuple] = None, clause: Union[Clause, tuple] = Clause.EQUAL) -> int:
         """Compte le nombre de modèles dans la base de données.
 
-        Args:
+        Arguments:
             column (Union[str, tuple], optional): La ou les colonnes à prendre en compte. Par défaut None.
             clause (Union[Clause, tuple], optional): Le ou les types de clause. Par défaut Clause.EQUAL.
 
@@ -211,7 +211,7 @@ class Model:
     def __getInstance(self, reflection : Reflection = None) -> Connection:
         """Récupère l'instance du modèle.
 
-        Args:
+        Arguments:
             reflection (Reflection, optional): La réflexion du modèle. Par défaut None.
             
         Returns:
@@ -226,7 +226,7 @@ class Model:
     def __runOn(self, query : Query, parameters : tuple = (), reflection : Reflection = None) -> Connection:
         """Exécute une requête sur la base de données liée au modèle.
 
-        Args:
+        Arguments:
             query (Query): La requête à exécuter.
             parameters (tuple, optional): Les paramètres de la requête. Par défaut, la liste est vide.
             reflection (Reflection, optional): La réflexion existante du modèle. Par défaut None.
@@ -242,7 +242,7 @@ class Model:
     def __findClause(self, column : Union[str, tuple] = None, clause: Union[Clause, tuple] = Clause.EQUAL) -> tuple:
         """Construction de la clause WHERE.
 
-        Args:
+        Arguments:
             column (Union[str, tuple]): La ou les colonnes.
             clause (Union[Clause, tuple], optional): Le ou les types de clause. Par défaut Clause.EQUAL.
 

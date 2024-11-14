@@ -3,20 +3,6 @@
 
 class Configuration:
     """Database connection configuration object.
-
-    Attributes:
-        database (str, optional): Database name. Default is 'db'.
-        user (str, optional): Username. Default is 'root'.
-        password (str, optional): Password. Empty by default.
-        host (str, optional): Server IP address. Default is 'localhost'.
-        port (int, optional): Server port. Default 3306.
-        maxpacket (int, optional): Maximum packet size. Default 65535.
-        unsecured (bool, optional): Disable SSL protocol. Default is False.
-        autocommit (bool, optional): Enable autocommit. Default is True.
-        prepared (bool, optional): Enable prepared statements. Default is True.
-        buffered (bool, optional): Enable buffering. Default is False.
-        timer (bool, optional): Enable timer. Default is True.
-        beautify (bool, optional): Enable object formatting. Default is False.
     """
     
     
@@ -73,99 +59,99 @@ class Configuration:
     
     
     def getUser(self) -> str:
-        """Retourne le nom d'utilisateur.
+        """Return username.
 
         Returns:
-            str: Nom d'utilisateur.
+            str: Username.
         """
         return self.__user
     
     
     def getPassword(self) -> str:
-        """Retourne le mot de passe.
+        """Return password.
 
         Returns:
-            str: Mot de passe.
+            str: password.
         """
         return self.__password
     
     
     def getHost(self) -> str:
-        """Retourne l'adresse IP du serveur.
+        """Return server IP address.
 
         Returns:
-            str: Adresse IP du serveur.
+            str: Server IP address.
         """
         return self.__host
     
     
     def getPort(self) -> int:
-        """Retourne le port du serveur.
-
+        """Return server port.
+ 
         Returns:
-            int: Port du serveur.
+            str: Server port.
         """
         return self.__port
     
     
     def getMaxpacket(self) -> int:
-        """Retourne la taille maximale des paquets.
+        """Return maximum packet size.
 
         Returns:
-            int: Taille maximale des paquets.
+            int: Maximum packet size.
         """
         return self.__maxpacket
     
     
     def isUnsecured(self) -> bool:
-        """Retourne l'état du protocole SSL.
+        """Return if SSL protocol is disabled.
 
         Returns:
-            bool: État du protocole SSL.
+            bool: If SSL protocol is disabled.
         """
         return self.__unsecured
     
     
     def isAutocommit(self) -> bool:
-        """Retourne l'état de l'autocommit.
+        """Retourne if autocommit is enabled.
 
         Returns:
-            bool: État de l'autocommit.
+            bool: If autocommit is enabled.
         """
         return self.__autocommit
     
     
     def isPrepared(self) -> bool:
-        """Retourne l'état des requêtes préparées.
+        """Retourne if prepared statements is enabled.
 
         Returns:
-            bool: État des requêtes préparées.
+            bool: If prepared statements is enabled.
         """
         return self.__prepared
     
     
     def isBuffered(self) -> bool:
-        """Retourne l'état de la mise en mémoire tampon.
+        """Retourne if buffering is enabled.
 
         Returns:
-            bool: État de la mise en mémoire tampon.
+            bool: If buffering is enabled.
         """
         return self.__buffered
     
     
     def hasTimer(self) -> bool:
-        """Retourne l'état du chronomètre.
+        """Retourne if has a timer.
 
         Returns:
-            bool: État du chronomètre.
+            bool: If has a timer.
         """
         return self.__timer
     
     
     def isBeautify(self) -> bool:
-        """Retourne l'état de la mise en forme des objets.
-        
+        """Retourne if object formatting is enabled.
+
         Returns:
-            bool: État de la mise en forme des objets.
+            bool: If object formatting is enabled.
         """
         return self.__beautify

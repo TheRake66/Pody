@@ -2,7 +2,7 @@ import logging
 import os
 from typing import Union
 
-from Pody.connection import Connection
+from pody.connection import Connection
 
 
 
@@ -14,7 +14,7 @@ class Generator:
     def __init__(self, connection : Connection) -> None:
         """Constructeur de la classe.
         
-        Args:
+        Arguments:
             connection (Connection): La connexion à la base de données.
         """
         self.__connection = connection
@@ -23,7 +23,7 @@ class Generator:
     def generateModels(self, tables : Union[str, tuple] = None) -> None:
         """Génère un modèle à partir d'une table.
         
-        Args:
+        Arguments:
             tables (Union[str, tuple]): Le nom de la table ou les tables. Si None, toutes les tables seront générées.
         """
         configuration = self.__connection.getConfiguration()
@@ -50,14 +50,14 @@ class Generator:
                 with open(model, mode="w", encoding="utf-8") as file:
                         
                     file.write(f'from datetime import datetime\n')
-                    file.write(f'from Pody.factory.repository.model import Model\n')
+                    file.write(f'from pody.factory.repository.model import Model\n')
                     file.write('\n')
                     file.write('\n')
                     file.write('\n')
                     file.write(f'class {name.capitalize()}(Model):\n')
                     file.write(f'    """Modèle de la table "{name}".\n')
                     file.write('\n')
-                    file.write(f'    Args:\n')
+                    file.write(f'    Arguments:\n')
                     file.write(f'        Model (Model): Modèle de base.\n')
                     file.write(f'    """\n')
                     file.write('\n')
@@ -119,7 +119,7 @@ class Generator:
                     file.write(f'    def __init__(self{parameters}):\n')
                     file.write(f'        """Constructeur de la classe.\n')
                     file.write('\n')
-                    file.write(f'        Args:\n')
+                    file.write(f'        Arguments:\n')
                     file.write(f'            {docstring}\n')
                     file.write(f'        """')
                     file.write(f'        {attributes}')

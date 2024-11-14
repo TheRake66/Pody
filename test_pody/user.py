@@ -1,12 +1,12 @@
 from datetime import datetime
-from Pody.factory.repository.model import Model
+from pody.factory.repository.model import Model
 
 
 
 class User(Model):
     """Modèle de la table "user".
 
-    Args:
+    Arguments:
         Model (Model): Modèle de base.
     """
 
@@ -18,7 +18,7 @@ class User(Model):
         mail : str = None):
         """Constructeur de la classe.
 
-        Args:
+        Arguments:
             
             _id (int, optional): Le champs "_id". Par défaut None.
             name (str, optional): Le champs "name". Par défaut None.

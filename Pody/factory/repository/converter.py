@@ -10,7 +10,7 @@ class Converter:
     def __init__(self, class_ : type) -> None:
         """Constructeur de la classe.
 
-        Args:
+        Arguments:
             class_ (type): Le modèle à convertir.
         """
         self.__model = class_
@@ -19,7 +19,7 @@ class Converter:
     def convertWith(self, data : dict) -> object:
         """Convertit les données vers le modèle.
 
-        Args:
+        Arguments:
             data (dict): Les données à convertir.
 
         Returns:

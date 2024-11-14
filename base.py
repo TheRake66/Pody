@@ -2,9 +2,10 @@
 import logging
 
 # Import des modules Pody.
-from Pody.configuration import Configuration
-from Pody.connection import Connection
-from Pody.factory.repository.generator import Generator
+from pody.configuration import Configuration
+from pody.connection import Connection
+from pody.factory.query import Query
+from pody.factory.repository.generator import Generator
 
 
 
@@ -22,18 +23,19 @@ config = Configuration('test_pody', 'root', '', 'localhost', 3306, 65535, True)
 # Connexion à la base de données.
 socket = Connection(config)
 
-User.clear()
-
-
-users = []
-for i in range(10000):
-    users.append(User(i, 'test', 'test', 'test'))
-User.inject(users)
-
-print()
 
 
 
+#for i in range(1, 10):
+#    User(i, f'test{i}', f'test{i}', f'test{i}@gmai.com').create()
+
+
+a = socket.runQuery(Query('select name from user where id = 1222323')).fetchOne()
+
+
+
+
+socket.closeSocket()
 
 
 

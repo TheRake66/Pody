@@ -10,7 +10,7 @@ class Reflection:
     def __init__(self, model : Union[object, type]) -> None:
         """Constructeur de la classe.
 
-        Args:
+        Arguments:
             model (Union[object, type]): Modèle à réfléchir.
         """
         if type(model) is type:
@@ -110,7 +110,7 @@ class Reflection:
     def parseKey(cls, key : str) -> str:
         """Parse une clé primaire.
         
-        Args:
+        Arguments:
             key (str): Clé primaire à parser.
         
         Returns:
@@ -123,7 +123,7 @@ class Reflection:
     def generateMark(cls, columns : list) -> tuple:
         """Génère une chaine de caractères de marqueurs.
         
-        Args:
+        Arguments:
             columns (list): Liste des colonnes à utiliser.
         
         Returns:

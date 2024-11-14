@@ -3,9 +3,9 @@ import logging
 import os
 import subprocess
 
-from Pody.configuration import Configuration
-from Pody.connection import Connection
-from Pody.factory.repository.generator import Generator
+from pody.configuration import Configuration
+from pody.connection import Connection
+from pody.factory.repository.generator import Generator
 
 
 
@@ -13,7 +13,7 @@ from Pody.factory.repository.generator import Generator
 def ask(text : str, default : any = None, isInt : bool = False) -> str:
     """Demande à l'utilisateur de saisir une valeur.
 
-    Args:
+    Arguments:
         text (str): Texte à afficher.
         default (any, optional): Valeur par défaut. Par défaut à None.
         isInt (bool, optional): Indique si la valeur saisie doit être un entier. Par défaut à False.
