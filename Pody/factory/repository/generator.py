@@ -12,7 +12,7 @@ class Generator:
     
     
     def __init__(self, connection : Connection) -> None:
-        """Constructeur de la classe.
+        """Constructor of the class.
         
         Arguments:
             connection (Connection): La connexion à la base de données.
@@ -117,7 +117,7 @@ class Generator:
                     docstring = ''.join(docstring)
                     
                     file.write(f'    def __init__(self{parameters}):\n')
-                    file.write(f'        """Constructeur de la classe.\n')
+                    file.write(f'        """Constructor of the class.\n')
                     file.write('\n')
                     file.write(f'        Arguments:\n')
                     file.write(f'            {docstring}\n')

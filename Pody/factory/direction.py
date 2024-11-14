@@ -1,9 +1,10 @@
+from enum import Enum
 
 
 
-class Direction:
-    """Enumération des types de direction de tri.
+class Direction(Enum):
+    """Enumeration of sort direction types.
     """
     
-    ASC = 'ASC'    # type: str # ASC
-    DESC = 'DESC'  # type: str # DESC
+    ASCENDING: str = 'ASC'
+    DESCENDING: str = 'DESC'

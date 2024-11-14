@@ -1,6 +1,5 @@
 import logging
 from time import time
-from typing import Any
 
 import mysql
 import mysql.connector
@@ -78,7 +77,7 @@ class Connection:
         
     
     def __init__(self, configuration: Configuration) -> None:
-        """Constructeur de la classe.
+        """Constructor of the class.
 
         Arguments:
             configuration (Configuration): Database connection configuration object.
@@ -147,15 +146,12 @@ class Connection:
         return self.__cursor.lastrowid
     
     
-    def runQuery(self, query: Query, parameters: Any = ()) -> 'Connection':
+    def runQuery(self, query: Query, parameters: tuple | str | int | float | bool = ()) -> None:
         """Executes a SQL query.
 
         Arguments:
             query (Query): Request object.
-            parameters (Any, optional): List of query parameters. By default, the list is empty.
-       
-        Returns:
-            Connection: Database connection instance.
+            parameters (tuple | str | int | float | bool, optional): One or list of query parameters. By default, the list is empty.
         """
         logging.info(f'Executing query "{query}"...')
         if type(parameters) is not tuple:
@@ -183,7 +179,6 @@ class Connection:
         if hastimer:
             seconds = round(stop - start, 3)
             logging.info(f'Query execution time: {seconds} second(s).')
-        return self
     
 
     def fetchAll(self) -> list:

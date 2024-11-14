@@ -8,7 +8,7 @@ class Reflection:
     
     
     def __init__(self, model : Union[object, type]) -> None:
-        """Constructeur de la classe.
+        """Constructor of the class.
 
         Arguments:
             model (Union[object, type]): Modèle à réfléchir.

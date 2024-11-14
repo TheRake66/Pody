@@ -1,16 +1,17 @@
+from enum import Enum
 
 
 
-class Clause:
-    """Enumération des types de clause.
+class Clause(Enum):
+    """List of clause types.
     """
     
-    NONE = ' '     # type: str # Clause vide
-    LESS = '<'     # type: str # <
-    GREATER = '>'  # type: str # >
-    EQUAL = '='    # type: str # =
-    LIKE = 'LIKE'  # type: str # LIKE
-    IS = 'IS'      # type: str # IS
-    IN = 'IN'      # type: str # IN
-    NOT = 'NOT'    # type: str # NOT
+    NONE: str = ' '
+    LESS: str = '<'
+    GREATER: str = '>'
+    EQUAL: str = '='
+    LIKE: str = 'LIKE'
+    IS: str = 'IS'
+    IN: str = 'IN'
+    NOT: str = 'NOT'
     

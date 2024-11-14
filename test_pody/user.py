@@ -16,7 +16,7 @@ class User(Model):
         name : str = None,
         firstname : str = None,
         mail : str = None):
-        """Constructeur de la classe.
+        """Constructor of the class.
 
         Arguments:
             

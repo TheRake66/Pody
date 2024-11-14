@@ -5,153 +5,148 @@ from pody.factory.join import Join
 
 
 class Query:
-    """Gestion des la fabrication des requêtes
+    """Query manufacturing object.
     """
     
     
-    def  __init__(self, query : str = '') -> None:
-        """Constructeur de la classe.
+    def  __init__(self, query: str = '') -> None:
+        """Constructor of the class.
         
         Arguments:
-            query (str, optional): Requête. Par défaut ''.
+            query (str, optional): Query. Default is ''.
         """
         self.__query = query
     
     
     def __str__(self) -> str:
-        """Retourne la requête.
+        """Representation of the query object.
         
         Returns:
-            str: La requête.
+            str: Query.
         """
         return self.__query.strip()
     
     
-    def select(self, columns : tuple = None) -> 'Query':
-        """Ajoute la clause SELECT à la requête.
+    def select(self, columns: tuple | str | None = None) -> 'Query':
+        """Adds a SELECT clause to the query.
         
         Arguments:
-            columns (tuple): Liste des colonnes à sélectionner.
+            columns (tuple | str | None): Column name or list of columns names to select. None to alls. Default is None.
         
         Returns:
-            Query: Instance de la classe.
+            Query: Instance of the class.
         """
-        self.__query += 'SELECT '
+        self.__addToQuery('SELECT')
         if columns is None:
-            self.__query += '* '
+            self.__addToQuery('*')
         elif not type(columns) is tuple:
-            self.__query += f'{columns} '
+            self.__addToQuery(columns)
         else:
-            for column in columns:
-                self.__query += f'{column}, '
-            self.__query = f'{self.__query[:-2]} '
+            self.__addTupleToQuery(columns)
         return self
     
     
-    def from_(self, tables : tuple) -> 'Query':
-        """Ajoute la clause FROM à la requête.
+    def from_(self, tables: tuple) -> 'Query':
+        """Adds a FROM clause to the query.
         
         Arguments:
-            tables (tuple): Liste des tables à sélectionner.
+            tables (tuple | str): Table name or list of tables names to search.
         
         Returns:
-            Query: Instance de la classe.
+            Query: Instance of the class.
         """
-        self.__query += 'FROM '
+        self.__addToQuery('FROM')
         if not type(tables) is tuple:
-            self.__query += f'{tables} '
+            self.__addToQuery(tables)
         else:
-            for table in tables:
-                self.__query += f'{table}, '
-            self.__query = f'{self.__query[:-2]} '
+            self.__addTupleToQuery(tables)
+        
+    
+    def where(self, column: str, value: str, type: Clause = Clause.EQUAL) -> 'Query':
+        """Adds a WHERE clause to the query.
+        
+        Arguments:
+            column (str): Column name.
+            value (str): Column value.
+            type (Clause, optional): Clause type. Default is Clause.EQUAL.
+        
+        Returns:
+            Query: Instance of the class.
+        """
+        self.__addToQuery(f'WHERE {column} {type} {value}')
         return self
     
     
-    def where(self, column : str, value : str, type : Clause = Clause.EQUAL) -> 'Query':
-        """Ajoute la clause WHERE à la requête.
+    def and_(self, column: str, value: str, type: Clause = Clause.EQUAL) -> 'Query':
+        """Adds a AND clause to the query.
         
         Arguments:
-            column (str): Nom de la colonne.
-            value (str): Valeur de la colonne.
-            type (Clause, optional): Type de la clause. Par défaut Clause.EQUAL.
+            column (str): Column name.
+            value (str): Column value.
+            type (Clause, optional): Clause type. Default is Clause.EQUAL.
         
         Returns:
-            Query: Instance de la classe.
+            Query: Instance of the class.
         """
-        self.__query += f'WHERE {column} {type} {value} '
+        self.__addToQuery(f'AND {column} {type} {value}')
         return self
     
     
-    def and_(self, column : str, value : str, type : Clause = Clause.EQUAL) -> 'Query':
-        """Ajoute la clause AND à la requête.
+    def or_(self, column: str, value: str, type: Clause = Clause.EQUAL) -> 'Query':
+        """Adds a OR clause to the query.
         
         Arguments:
-            column (str): Nom de la colonne.
-            value (str): Valeur de la colonne.
-            type (Clause, optional): Type de la clause. Par défaut Clause.EQUAL.
+            column (str): Column name.
+            value (str): Column value.
+            type (Clause, optional): Clause type. Default is Clause.EQUAL.
         
         Returns:
-            Query: Instance de la classe.
+            Query: Instance of the class.
         """
-        self.__query += f'AND {column} {type} {value} '
+        self.__addToQuery(f'OR {column} {type} {value}')
         return self
     
     
-    def or_(self, column : str, value : str, type : Clause = Clause.EQUAL) -> 'Query':
-        """Ajoute la clause OR à la requête.
+    def on(self, column1: str, column2: str) -> 'Query':
+        """Adds a ON clause to the query.
         
         Arguments:
-            column (str): Nom de la colonne.
-            value (str): Valeur de la colonne.
-            type (Clause, optional): Type de la clause. Par défaut Clause.EQUAL.
+            column1 (str): First column name.
+            column2 (str): Second column name.
         
         Returns:
-            Query: Instance de la classe.
+            Query: Instance of the class.
         """
-        self.__query += f'OR {column} {type} {value} '
+        self.__addToQuery(f'ON {column1} = {column2}')
         return self
     
     
-    def on(self, column1 : str, column2 : str) -> 'Query':
-        """Ajoute la clause ON à la requête.
+    def join(self, table: str, type: Join = Join.INNER) -> 'Query':
+        """Adds a JOIN clause to the query.
         
         Arguments:
-            column1 (str): Nom de la colonne.
-            column2 (str): Nom de la colonne.
+            table (str): Table name.
+            type (Join, optional): Join type. Default is Join.INNER.
         
         Returns:
-            Query: Instance de la classe.
+            Query: Instance of the class.
         """
-        self.__query += f'ON {column1} = {column2} '
+        self.__addToQuery(f'{type} JOIN {table}')
         return self
     
     
-    def join(self, table : str, type : Join = Join.INNER) -> 'Query':
-        """Ajoute la clause JOIN à la requête.
+    def having(self, column: str, value: str, type: Clause = Clause.EQUAL) -> 'Query':
+        """Adds a HAVING clause to the query.
         
         Arguments:
-            table (str): Nom de la table.
-            type (Join, optional): Type de la jointure. Par défaut Join.INNER.
+            column (str): Column name.
+            value (str): Column value.
+            type (Clause, optional): Clause type. Default is Clause.EQUAL.
         
         Returns:
-            Query: Instance de la classe.
+            Query: Instance of the class.
         """
-        self.__query += f'{type} JOIN {table} '
-        return self
-    
-    
-    def having(self, column : str, value : str, type : Clause = Clause.EQUAL) -> 'Query':
-        """Ajoute la clause HAVING à la requête.
-        
-        Arguments:
-            column (str): Nom de la colonne.
-            value (str): Valeur de la colonne.
-            type (Clause, optional): Type de la clause. Par défaut Clause.EQUAL.
-        
-        Returns:
-            Query: Instance de la classe.
-        """
-        self.__query += f'HAVING {column} {type} {value} '
+        self.__addToQuery(f'HAVING {column} {type} {value}')
         return self
     
     
@@ -162,7 +157,7 @@ class Query:
             columns (tuple): Liste des colonnes.
         
         Returns:
-            Query: Instance de la classe.
+            Query: Instance of the class.
         """
         self.__query += 'GROUP BY '
         if not type(columns) is tuple:
@@ -174,7 +169,7 @@ class Query:
         return self
     
     
-    def order(self, columns : tuple, direction : Direction = Direction.ASC) -> 'Query':
+    def order(self, columns : tuple, direction : Direction = Direction.ASCENDING) -> 'Query':
         """Ajoute la clause ORDER BY à la requête.
         
         Arguments:
@@ -182,7 +177,7 @@ class Query:
             direction (Direction, optional): Direction de tri. Par défaut Direction.ASC.
         
         Returns:
-            Query: Instance de la classe.
+            Query: Instance of the class.
         """
         self.__query += 'ORDER BY '
         if not type(columns) is tuple:
@@ -203,7 +198,7 @@ class Query:
             offset (int, optional): Nombre de lignes à sauter. Par défaut 0.
         
         Returns:
-            Query: Instance de la classe.
+            Query: Instance of the class.
         """
         self.__query += f'LIMIT {offset}, {count} '
         return self
@@ -217,7 +212,7 @@ class Query:
             columns (tuple): Liste des colonnes.
         
         Returns:
-            Query: Instance de la classe.
+            Query: Instance of the class.
         """
         self.__query += f'INSERT INTO {table} ('
         for column in columns:
@@ -233,7 +228,7 @@ class Query:
             values (tuple): Liste des valeurs.
         
         Returns:
-            Query: Instance de la classe.
+            Query: Instance of the class.
         """
         self.__query += 'VALUES ('
         for value in values:
@@ -251,7 +246,7 @@ class Query:
             values (tuple): Liste des valeurs.
         
         Returns:
-            Query: Instance de la classe.
+            Query: Instance of the class.
         """
         self.__query += f'UPDATE {table} SET '
         for i in range(len(columns)):
@@ -267,7 +262,7 @@ class Query:
             table (str): Nom de la table.
         
         Returns:
-            Query: Instance de la classe.
+            Query: Instance of the class.
         """
         self.__query += f'DELETE FROM {table} '
         return self
@@ -280,7 +275,7 @@ class Query:
             table (str): Nom de la table.
         
         Returns:
-            Query: Instance de la classe.
+            Query: Instance of the class.
         """
         self.__query += f'TRUNCATE TABLE {table} '
         return self
@@ -293,7 +288,7 @@ class Query:
             table (str): Nom de la table.
         
         Returns:
-            Query: Instance de la classe.
+            Query: Instance of the class.
         """
         self.__query += f'DROP TABLE {table} '
         return self
@@ -303,7 +298,7 @@ class Query:
         """Ajoute une parenthèse ouvrante à la requête.
         
         Returns:
-            Query: Instance de la classe.
+            Query: Instance of the class.
         """
         self.__query += '( '
         return self
@@ -313,7 +308,33 @@ class Query:
         """Ajoute une parenthèse fermante à la requête.
         
         Returns:
-            Query: Instance de la classe.
+            Query: Instance of the class.
         """
         self.__query += ') '
         return self
+    
+    
+    
+    
+    
+    
+    
+    
+    def __addToQuery(self, value: str) -> None:
+        """Adds a value to the query.
+
+        Args:
+            value (str): Value.
+        """
+        self.__query += f'{value} '
+    
+    
+    def __addTupleToQuery(self, values: tuple) -> None:
+        """Adds a list of values to the query, separating them with commas.
+
+        Arguments:
+            values (tuple): List of values.
+        """
+        for value in values:
+            self.__query += f'{value}, '
+        self.__query = f'{self.__query[:-2]} '

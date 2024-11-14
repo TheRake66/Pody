@@ -8,7 +8,7 @@ class Converter:
     
     
     def __init__(self, class_ : type) -> None:
-        """Constructeur de la classe.
+        """Constructor of the class.
 
         Arguments:
             class_ (type): Le modèle à convertir.
