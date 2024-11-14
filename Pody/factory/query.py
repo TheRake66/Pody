@@ -150,90 +150,90 @@ class Query:
         return self
     
     
-    def group(self, columns : tuple) -> 'Query':
-        """Ajoute la clause GROUP BY à la requête.
+    def group(self, columns: tuple | str) -> 'Query':
+        """Adds a GROUP BY clause to the query.
         
         Arguments:
-            columns (tuple): Liste des colonnes.
+            columns (tuple | str): Column name or list of columns names to group by.
         
         Returns:
             Query: Instance of the class.
         """
-        self.__query += 'GROUP BY '
+        self.__addToQuery('GROUP BY')
         if not type(columns) is tuple:
-            self.__query += f'{columns} '
+            self.__addToQuery(columns)
         else:
-            for column in columns:
-                self.__query += f'{column}, '
-            self.__query = f'{self.__query[:-2]} '
+            self.__addTupleToQuery(columns)
         return self
     
     
-    def order(self, columns : tuple, direction : Direction = Direction.ASCENDING) -> 'Query':
-        """Ajoute la clause ORDER BY à la requête.
+    def order(self, columns: tuple | str, direction: Direction = Direction.ASCENDING) -> 'Query':
+        """Adds a ORDER BY clause to the query.
         
         Arguments:
-            columns (tuple): Liste des colonnes.
-            direction (Direction, optional): Direction de tri. Par défaut Direction.ASC.
+            columns (tuple | str): Column name or list of columns names to group by.
+            direction (Direction, optional): Sort direction. Default is Direction.ASCENDING.
         
         Returns:
             Query: Instance of the class.
         """
-        self.__query += 'ORDER BY '
+        self.__addToQuery('ORDER BY')
         if not type(columns) is tuple:
-            self.__query += f'{columns}'
+            self.__addToQuery(columns)
         else:
-            for column in columns:
-                self.__query += f'{column}, '
-            self.__query = self.__query[:-2]
-        self.__query += f' {direction} '
+            self.__addTupleToQuery(columns)
+        self.__addToQuery(direction)
         return self
             
     
-    def limit(self, count : int, offset : int = 0) -> 'Query':
-        """Ajoute la clause LIMIT à la requête.
+    def limit(self, count: int, offset: int = 0) -> 'Query':
+        """Adds a LIMIT clause to the query.
         
         Arguments:
-            count (int): Nombre de lignes à sélectionner.
-            offset (int, optional): Nombre de lignes à sauter. Par défaut 0.
+            count (int): Number of lines to select.
+            offset (int, optional): Number of lines to skip. Default 0.
         
         Returns:
             Query: Instance of the class.
         """
-        self.__query += f'LIMIT {offset}, {count} '
+        self.__addToQuery(f'LIMIT {offset}, {count}')
         return self
     
     
-    def insert(self, table : str, columns : tuple) -> 'Query':
-        """Ajoute la clause INSERT INTO à la requête.
+    def insert(self, table: str, columns: tuple | str) -> 'Query':
+        """Adds a INSERT INTO clause to the query.
         
         Arguments:
-            table (str): Nom de la table.
-            columns (tuple): Liste des colonnes.
+            table (str): Table name.
+            columns (tuple | str): Column name or list of columns names.
         
         Returns:
             Query: Instance of the class.
         """
-        self.__query += f'INSERT INTO {table} ('
-        for column in columns:
-            self.__query += f'{column}, '
-        self.__query = f'{self.__query[:-2] }) '
+        self.__addToQuery(f'INSERT INTO {table} (')
+        if not type(columns) is tuple:
+            self.__addToQuery(columns)
+        else:
+            self.__addTupleToQuery(columns)
+        self.__addToQuery(f')')
         return self
     
     
-    def values(self, values : tuple) -> 'Query':
-        """Ajoute la clause VALUES à la requête.
+    def values(self, values: tuple | str) -> 'Query':
+        """Adds a VALUES clause to the query.
         
         Arguments:
-            values (tuple): Liste des valeurs.
+            values (tuple | str): Value or values.
         
         Returns:
             Query: Instance of the class.
         """
-        self.__query += 'VALUES ('
-        for value in values:
-            self.__query += f'{value}, '
-        self.__query = f'{self.__query[:-2]}) '
+        self.__addToQuery(f'VALUES (')
+        if not type(values) is tuple:
+            self.__addToQuery(values)
+        else:
+            self.__addTupleToQuery(values)
+        self.__addToQuery(f')')
         return self
     
     
