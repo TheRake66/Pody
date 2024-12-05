@@ -26,7 +26,7 @@ class Connection:
         """Returns the list of database connection instances.
 
         Returns:
-            dict:  List of database connection instances.
+            dict: List of database connection instances.
         """
         return cls.__instances
     
